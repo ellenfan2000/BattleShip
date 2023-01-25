@@ -1,0 +1,5 @@
+package edu.duke.rf96.battleship;
+
+public class BoardTextView {
+
+}
