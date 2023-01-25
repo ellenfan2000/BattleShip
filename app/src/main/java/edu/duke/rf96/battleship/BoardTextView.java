@@ -45,7 +45,7 @@ public class BoardTextView {
   }
 
   /**
-   * this prints a blank board, e.g.
+   * this prints a board, e.g.
    * 0|1|2|3|4|5|6|7|8|9
    * A | | | | | | | | | A
    * B | | | | | | | | | B
@@ -62,14 +62,21 @@ public class BoardTextView {
     String sep = "|";
     char lineC = 'A';
     // i for line
-    for (int i = 0; i < toDisplay.getHeight(); i++) {
+    for (int row = 0; row < toDisplay.getHeight(); row++) {
       ans.append(lineC);
       ans.append(" ");
       sep = "";
       // j for column
-      for (int j = 0; j < toDisplay.getWidth(); j++) {
+      for (int col = 0; col < toDisplay.getWidth(); col++) {
         ans.append(sep);
-        ans.append(" ");
+        Character display = toDisplay.whatIsAt(new Coordinate(row, col));
+        
+        if (display == null){
+          ans.append(" ");//no ship
+        }else{
+          ans.append(display);
+        }
+        //ans.append(" ");
         sep = "|";
       }
       ans.append(" ");
