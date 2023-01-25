@@ -22,7 +22,7 @@ public class Coordinate {
     char r = descr.charAt(0);
     char c = descr.charAt(1);
 
-    // invalid strings
+    // invalid strings: out of possible range
     if (r < 'A' || r > 'Z') {
       throw new IllegalArgumentException("Coordinate row should be between A and Z, but is " + r);
     }
