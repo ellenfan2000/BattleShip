@@ -4,7 +4,13 @@ import java.util.HashSet;
 
 public class RectangleShip<T> extends BasicShip<T>{
 
-  static HashSet<Coordinate> makeCoords(Coordinate upperLeft, int width, int height) {
+  private final String name;
+
+  public String getName(){
+    return name;
+  }
+  
+  static HashSet<Coordinate> makeCoords( Coordinate upperLeft, int width, int height) {
     HashSet<Coordinate> ans = new HashSet<Coordinate>();
     for (int w = 0; w < width; w++) {
       for (int h = 0; h < height; h++) {
@@ -16,14 +22,15 @@ public class RectangleShip<T> extends BasicShip<T>{
 
   }
 
-  public RectangleShip(Coordinate upperLeft, int width, int height, ShipDisplayInfo<T> info) {
+  public RectangleShip(String n, Coordinate upperLeft, int width, int height, ShipDisplayInfo<T> info) {
     super(makeCoords(upperLeft, width, height), info);
+    this.name = n;
    }
 
-  public RectangleShip(Coordinate upperLeft, int width, int height, T data, T onHit) {
-    this(upperLeft, width, height, new SimpleShipDisplayInfo<T>(data, onHit));
+  public RectangleShip(String n, Coordinate upperLeft, int width, int height, T data, T onHit) {
+    this(n,upperLeft, width, height, new SimpleShipDisplayInfo<T>(data, onHit));
   }
   public RectangleShip(Coordinate upperLeft, T data, T onHit) {
-    this(upperLeft, 1, 1, data, onHit);
+    this("testship",upperLeft, 1, 1, data, onHit);
   }
 }

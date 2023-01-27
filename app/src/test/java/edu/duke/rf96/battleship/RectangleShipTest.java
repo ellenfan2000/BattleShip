@@ -25,14 +25,14 @@ public class RectangleShipTest {
   public void test_Constructor() {
 
     Coordinate c = new Coordinate(2, 5);
-    RectangleShip<Character> s = new RectangleShip<Character>(c, 3, 2, 's', '*');
+    RectangleShip<Character> s = new RectangleShip<Character>("submarine",c, 3, 2, 's', '*');
     assertEquals(true, s.occupiesCoordinates(new Coordinate(2, 5)));
     assertEquals(true, s.occupiesCoordinates(new Coordinate(3, 5)));
     assertEquals(true, s.occupiesCoordinates(new Coordinate(2, 6)));
     assertEquals(true, s.occupiesCoordinates(new Coordinate(3, 6)));
     assertEquals(true, s.occupiesCoordinates(new Coordinate(2, 7)));
     assertEquals(true, s.occupiesCoordinates(new Coordinate(3, 7)));
-
+    assertEquals("submarine", s.getName());
   }
 
   @Test
@@ -40,7 +40,7 @@ public class RectangleShipTest {
     Coordinate c = new Coordinate(2, 5);
     Coordinate c2 = new Coordinate(2, 7);
     Coordinate c3 = new Coordinate(3, 6);
-    RectangleShip<Character> s = new RectangleShip<Character>(c, 3, 2, 's', '*');
+    RectangleShip<Character> s = new RectangleShip<Character>("submarine",c, 3, 2, 's', '*');
     assertThrows(IllegalArgumentException.class,() -> s.recordHitAt(new Coordinate(0, 0)));
     s.recordHitAt(c);
     s.recordHitAt(c2);
@@ -55,7 +55,7 @@ public class RectangleShipTest {
   @Test
   public void test_sink(){
     Coordinate c = new Coordinate(2, 5); 
-    RectangleShip<Character> s = new RectangleShip<Character>(c, 3, 2, 's', '*');
+    RectangleShip<Character> s = new RectangleShip<Character>("submarine", c, 3, 2, 's', '*');
     for(int row = 2; row < 3; row ++ ){
       for(int col = 5; col < 8; col++){
         s.recordHitAt(new Coordinate(row, col));
@@ -72,7 +72,7 @@ public class RectangleShipTest {
   @Test
   public void test_getdisplayInfo(){
     Coordinate c = new Coordinate(2, 5); 
-    RectangleShip<Character> s = new RectangleShip<Character>(c, 3, 2, 's', '*');
+    RectangleShip<Character> s = new RectangleShip<Character>("submarine",c, 3, 2, 's', '*');
     for(int row = 2; row < 3; row ++ ){
       for(int col = 5; col < 8; col++){
         s.recordHitAt(new Coordinate(row, col));

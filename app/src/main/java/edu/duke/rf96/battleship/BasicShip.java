@@ -3,7 +3,7 @@ package edu.duke.rf96.battleship;
 
 import java.util.HashMap;
 
-public class BasicShip<T> implements Ship<T> {
+public abstract class BasicShip<T> implements Ship<T> {
   //private final Coordinate myLocation;
 
   protected HashMap<Coordinate, Boolean> myPieces;
