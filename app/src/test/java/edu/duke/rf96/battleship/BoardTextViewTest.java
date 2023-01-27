@@ -64,10 +64,10 @@ public class BoardTextViewTest {
         "E  | |s E\n";
     Board<Character> b1 = new BattleShipBoard<Character>(3, 5);
 
-    Ship<Character> s1 = new BasicShip(new Coordinate(0, 0));
-    Ship<Character> s2 = new BasicShip(new Coordinate(1, 1));
-    Ship<Character> s3 = new BasicShip(new Coordinate(2, 1));
-    Ship<Character> s4 = new BasicShip(new Coordinate(4, 2));
+    Ship<Character> s1 = new RectangleShip<Character>(new Coordinate(0, 0), 's', '*');
+    Ship<Character> s2 = new RectangleShip<Character>(new Coordinate(1, 1), 's', '*');
+    Ship<Character> s3 = new RectangleShip<Character>(new Coordinate(2, 1), 's', '*');
+    Ship<Character> s4 = new RectangleShip<Character>(new Coordinate(4, 2), 's', '*');
 
     b1.tryAddShip(s1);
     b1.tryAddShip(s2);

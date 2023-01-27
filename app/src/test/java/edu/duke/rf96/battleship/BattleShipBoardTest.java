@@ -43,9 +43,9 @@ public class BattleShipBoardTest {
      
      Character expected[][] = new Character[20][10] ;
      //     Coordinate c1 = new Coordinate(0, 0);
-     Ship<Character> s1 = new BasicShip(new Coordinate(0, 0));
-     Ship<Character> s2 = new BasicShip(new Coordinate(1, 3));
-     Ship<Character> s3 = new BasicShip(new Coordinate(7, 9));
+     Ship<Character> s1 = new RectangleShip<Character>(new Coordinate(0, 0), 's', '*');
+     Ship<Character> s2 = new RectangleShip<Character>(new Coordinate(1, 3), 's', '*');
+     Ship<Character> s3 = new RectangleShip<Character>(new Coordinate(7, 9), 's', '*');
 
      expected[0][0] = 's';
      expected[1][3] = 's';
