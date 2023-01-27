@@ -26,35 +26,45 @@ public class BasicShip<T> implements Ship<T> {
     
   }
 
+  protected void checkCoordinateInThisShip(Coordinate c){
+    if(myPieces.get(c) == null){
+      throw new IllegalArgumentException("The coornidate is not in the ship");
+    }
+  }
+
   @Override
   public boolean occupiesCoordinates(Coordinate where) {
-    // TODO Auto-generated method stub
+    
     return myPieces.containsKey(where);
   }
 
   @Override
   public boolean isSunk() {
-    // TODO Auto-generated method stub
-    return false;
+    for(Coordinate c: myPieces.keySet()){
+      if(!myPieces.get(c)){
+        return false;
+      }
+    }
+    return true;
   }
 
   @Override
   public void recordHitAt(Coordinate where) {
-    // TODO Auto-generated method stub
+    checkCoordinateInThisShip(where);
+    myPieces.put(where, true);
     
   }
 
   @Override
   public boolean wasHitAt(Coordinate where) {
-    // TODO Auto-generated method stub
-    return false;
+    checkCoordinateInThisShip(where);
+    return myPieces.get(where);
   }
 
   @Override
   public T getDisplayInfoAt(Coordinate where) {
-    //TODO this is not right.  We need to
-    //look up the hit status of this coordinate
-   return myDisplayInfo.getInfo(where, false);
+    checkCoordinateInThisShip(where);
+    return myDisplayInfo.getInfo(where, myPieces.get(where));
   }
 
 }
