@@ -58,13 +58,13 @@ public class NoCollisionRuleCheckerTest {
     Ship<Character> s1 = factory.makeBattleship(new Placement(new Coordinate(0, 0), 'H'));
     assertTrue(rule2.checkPlacement(s1, b));
     
-    Ship<Character> s2 = factory.makeCarrier(new Placement(new Coordinate(3, 2), 'H'));
+    Ship<Character> s2 = factory.makeCarrier(new Placement(new Coordinate(2, 2), 'H'));
     assertTrue(rule2.checkPlacement(s1, b));
     
-    Ship<Character> s3 = factory.makeSubmarine(new Placement(new Coordinate(5,9), 'V'));
+    Ship<Character> s3 = factory.makeSubmarine(new Placement(new Coordinate(4,9), 'V'));
     assertTrue(rule2.checkPlacement(s1, b));
     
-    Ship<Character> s4 = factory.makeCarrier(new Placement(new Coordinate(5, 4), 'V'));
+    Ship<Character> s4 = factory.makeCarrier(new Placement(new Coordinate(4, 4), 'V'));
     assertTrue(rule2.checkPlacement(s1, b));
 
     b.tryAddShip(s1);
@@ -73,7 +73,7 @@ public class NoCollisionRuleCheckerTest {
     b.tryAddShip(s3);
     b.tryAddShip(s4);
 
-    Ship<Character> s5 = factory.makeBattleship(new Placement(new Coordinate(3, 1), 'H')); //Collision
+    Ship<Character> s5 = factory.makeBattleship(new Placement(new Coordinate(2, 1), 'H')); //Collision
     assertFalse(rule2.checkPlacement(s5, b));
      
     Ship<Character> s6 = factory.makeCarrier(new Placement(new Coordinate(0, 2), 'V'));//Collision
@@ -85,7 +85,7 @@ public class NoCollisionRuleCheckerTest {
     Ship<Character> s8 = factory.makeBattleship(new Placement(new Coordinate(8, 0), 'V'));//InBound
     assertFalse(rule2.checkPlacement(s8, b));
 
-    Ship<Character> s9 = factory.makeCarrier(new Placement(new Coordinate(3, 6), 'H'));//InBound and Collision
+    Ship<Character> s9 = factory.makeCarrier(new Placement(new Coordinate(2, 6), 'H'));//InBound and Collision
     assertFalse(rule2.checkPlacement(s9, b));
 
     Ship<Character> s10 = factory.makeCarrier(new Placement(new Coordinate(9, -1), 'H'));//InBound and Collision
