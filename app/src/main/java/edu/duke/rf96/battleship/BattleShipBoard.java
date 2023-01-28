@@ -30,7 +30,7 @@ public class BattleShipBoard<T> implements Board<T> {
     this.width = w;
     this.height = h;
     myShips = new ArrayList<Ship<T>>();
-    placementChecker = new InBoundsRuleChecker<T>(rc);
+    placementChecker = rc;
   }
 
   public BattleShipBoard(int w, int h) {
