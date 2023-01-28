@@ -19,14 +19,6 @@ public abstract class BasicShip<T> implements Ship<T> {
   protected HashMap<Coordinate, Boolean> myPieces;
   protected ShipDisplayInfo<T> myDisplayInfo;
 
-  // public BasicShip(Coordinate c){
-  // // Coordinate c2 = new Coordinate(c.getRow(), c.getColumn());
-  // // myLocation = c2;
-  // //myPieces = RectangleShip.makeCoords(c, 1, 2);
-  // myPieces = new HashMap<Coordinate, Boolean>();
-  // myPieces.put(c, false);
-  // }
-
   public BasicShip(Iterable<Coordinate> where, ShipDisplayInfo<T> myDisplayInfo) {
     myPieces = new HashMap<Coordinate, Boolean>();
     for (Coordinate c : where) {
@@ -81,6 +73,15 @@ public abstract class BasicShip<T> implements Ship<T> {
   public T getDisplayInfoAt(Coordinate where) {
     checkCoordinateInThisShip(where);
     return myDisplayInfo.getInfo(where, myPieces.get(where));
+  }
+
+  /**
+   * Get all of the Coordinates that this Ship occupies.
+   * 
+   * @return An Iterable with the coordinates that this Ship occupies
+   */
+  public Iterable<Coordinate> getCoordinates() {
+    return myPieces.keySet();
   }
 
 }

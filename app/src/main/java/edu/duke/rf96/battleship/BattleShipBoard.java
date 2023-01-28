@@ -5,18 +5,22 @@ import java.util.ArrayList;
 public class BattleShipBoard<T> implements Board<T> {
   private final int width;
   private final int height;
-  final ArrayList<Ship<T>> myShips;
+  private final ArrayList<Ship<T>> myShips;
+  private final PlacementRuleChecker<T> placementChecker;
 
   /**
    * Constructs a BattleShipBoard with the specified width
    * and height
    * 
-   * @param w is the width of the newly constructed board.
-   * @param h is the height of the newly constructed board.
+   * @param w              is the width of the newly constructed board.
+   * @param h              is the height of the newly constructed board.
+   * @param myShips        is a arraylists of all ships on the board
+   * @param placementCheck is used to check whether the placement of a ship is
+   *                       valid
    * @throws IllegalArgumentException if the width or height are less than or
    *                                  equal to zero.
    */
-  public BattleShipBoard(int w, int h) {
+  public BattleShipBoard(int w, int h, PlacementRuleChecker<T> rc) {
     if (w <= 0) {
       throw new IllegalArgumentException("BattleShipBoard's width must be positive but is " + w);
     }
@@ -26,6 +30,11 @@ public class BattleShipBoard<T> implements Board<T> {
     this.width = w;
     this.height = h;
     myShips = new ArrayList<Ship<T>>();
+    placementChecker = new InBoundsRuleChecker<T>(rc);
+  }
+
+  public BattleShipBoard(int w, int h) {
+    this(w, h, new InBoundsRuleChecker<T>(null));
   }
 
   public int getWidth() {
@@ -35,8 +44,11 @@ public class BattleShipBoard<T> implements Board<T> {
   public int getHeight() {
     return height;
   }
-  /*
-   * add the ship to the list myShips and return true if success
+
+  /**
+   * add the ship to the list myShips
+   * 
+   * @return true if success, false if not
    */
 
   public boolean tryAddShip(Ship<T> toAdd) {

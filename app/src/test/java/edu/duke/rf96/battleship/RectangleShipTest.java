@@ -88,5 +88,22 @@ public class RectangleShipTest {
         assertEquals('s', s.getDisplayInfoAt(new Coordinate(3, col)));
       }
   }
+  
+  @Test
+  public void test_getCoords(){
+    Coordinate c = new Coordinate(2, 5); 
+    RectangleShip<Character> s = new RectangleShip<Character>("submarine",c, 3, 2, 's', '*');
+    Iterable<Coordinate> coords = s.getCoordinates();
+
+    HashSet<Coordinate> expected = new HashSet<Coordinate>();
+     for(int row = 2; row < 4; row ++ ){
+      for(int col = 5; col < 8; col++){
+        expected.add(new Coordinate(row, col));
+      }
+    }
+     for(Coordinate co:coords){
+       assertTrue(expected.contains(co));
+     }
+  }
 
 }
