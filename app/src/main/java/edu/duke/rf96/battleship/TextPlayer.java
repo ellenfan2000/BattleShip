@@ -3,6 +3,10 @@ package edu.duke.rf96.battleship;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.function.Function;
 
 public class TextPlayer {
   private final Board<Character> theBoard;
@@ -11,16 +15,40 @@ public class TextPlayer {
   final PrintStream out;
   final AbstractShipFactory<Character> shipFactory;
   private final String name;
+  final ArrayList<String> shipsToPlace;
+  final HashMap<String, Function<Placement, Ship<Character>>> shipCreationFns;
 
   public TextPlayer(String name, Board<Character> theBoard, BufferedReader inputSource, PrintStream out,
       AbstractShipFactory<Character> factory) {
     this.theBoard = theBoard;
     this.view = new BoardTextView(theBoard);
-    //this.inputReader = new BufferedReader(inputSource);
+    // this.inputReader = new BufferedReader(inputSource);
     this.inputReader = inputSource;
     this.out = out;
     this.shipFactory = factory;
     this.name = name;
+    this.shipsToPlace = new ArrayList<String>();
+    this.shipCreationFns = new HashMap<String, Function<Placement, Ship<Character>>>();
+    setupShipCreationMap();
+    setupShipCreationList();
+      
+                      
+  }
+
+
+  protected void setupShipCreationMap(){
+    shipCreationFns.put("Submarine", (p) -> shipFactory.makeSubmarine(p));
+    shipCreationFns.put("Destroyer", (p) -> shipFactory.makeDestroyer(p));
+    shipCreationFns.put("Battleship", (p) -> shipFactory.makeBattleship(p));
+    shipCreationFns.put("Carrier", (p) -> shipFactory.makeCarrier(p));
+  }
+
+  protected void setupShipCreationList(){
+    shipsToPlace.addAll(Collections.nCopies(2, "Submarine"));
+    shipsToPlace.addAll(Collections.nCopies(3, "Destroyer"));
+    shipsToPlace.addAll(Collections.nCopies(3, "Battleship"));
+    shipsToPlace.addAll(Collections.nCopies(2, "Carrier"));
+
   }
 
   /*
@@ -29,7 +57,7 @@ public class TextPlayer {
   public Placement readPlacement(String prompt) throws IOException {
     out.println(prompt);
     String s = inputReader.readLine();
-    //System.out.println(s);
+    // System.out.println(s);
     return new Placement(s);
   }
 
@@ -38,9 +66,17 @@ public class TextPlayer {
    * put a ship on board
    * and print the board
    */
-  public void doOnePlacement() throws IOException {
-    Placement p = readPlacement("Player " + name + " where do you want to place a Destroyer?");
-    Ship<Character> s = shipFactory.makeDestroyer(p);
+  // public void doOnePlacement() throws IOException {
+  // Placement p = readPlacement("Player " + name + " where do you want to place a
+  // Destroyer?");
+  // Ship<Character> s = shipFactory.makeDestroyer(p);
+  // theBoard.tryAddShip(s);
+  // out.print(view.displayMyOwnBoard());
+  // }
+
+  public void doOnePlacement(String shipName, Function<Placement, Ship<Character>> createFn) throws IOException {
+    Placement p = readPlacement("Player " + name + " where do you want to place a " + shipName + "?");
+    Ship<Character> s = createFn.apply(p);
     theBoard.tryAddShip(s);
     out.print(view.displayMyOwnBoard());
   }
@@ -49,7 +85,7 @@ public class TextPlayer {
    * this method display the starting (empty) board
    * ,print the instructions message (from the README,
    * but also shown again near the top of this file)
-   * , call doOnePlacement to place one ship
+   * , call doOnePlacement to place every ship
    * 
    */
 
@@ -67,8 +103,9 @@ public class TextPlayer {
         "3 \"Battleships\" that are 1x4\n" +
         "2 \"Carriers\" that are 1x6\n" +
         "--------------------------------------------------------------------------------");
-
-    doOnePlacement();
+    for (String s:shipsToPlace){
+      doOnePlacement(s, shipCreationFns.get(s));
+    }
   }
 
 }
