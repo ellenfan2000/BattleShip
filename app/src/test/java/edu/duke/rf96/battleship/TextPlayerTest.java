@@ -22,7 +22,6 @@ public class TextPlayerTest {
     return new TextPlayer(name, board, input, output, shipFactory);
   }
 
-  
   @Test
    public void test_read_placement() throws IOException {
     // StringReader sr = new StringReader("B2V\nC8H\na4v\n");
@@ -58,10 +57,10 @@ public class TextPlayerTest {
   public void test_read_one_placement() throws IOException {
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
     TextPlayer player1= createTextPlayer("A",3, 5, "B2V\nC8H\na4v\n", bytes);
-    TextPlayer player2= createTextPlayer("A", 3, 5, "B4h\nA9V\na4v\n", bytes);
+    // TextPlayer player2= createTextPlayer("A", 3, 5, "B4h\nA9V\na4v\n", bytes);
 
     
-    App app = new App(player1, player2);
+    // App app = new App(player1, player2);
 
     String prompt ="Player A where do you want to place a Destroyer?";
 

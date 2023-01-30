@@ -3,7 +3,6 @@ package edu.duke.rf96.battleship;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.io.Reader;
 
 public class TextPlayer {
   private final Board<Character> theBoard;
@@ -13,12 +12,12 @@ public class TextPlayer {
   final AbstractShipFactory<Character> shipFactory;
   private final String name;
 
-  public TextPlayer(String name, Board<Character> theBoard, Reader inputSource, PrintStream out,
+  public TextPlayer(String name, Board<Character> theBoard, BufferedReader inputSource, PrintStream out,
       AbstractShipFactory<Character> factory) {
     this.theBoard = theBoard;
     this.view = new BoardTextView(theBoard);
-    this.inputReader = new BufferedReader(inputSource);
-    // this.inputReader = inputSource;
+    //this.inputReader = new BufferedReader(inputSource);
+    this.inputReader = inputSource;
     this.out = out;
     this.shipFactory = factory;
     this.name = name;
@@ -30,6 +29,7 @@ public class TextPlayer {
   public Placement readPlacement(String prompt) throws IOException {
     out.println(prompt);
     String s = inputReader.readLine();
+    //System.out.println(s);
     return new Placement(s);
   }
 
