@@ -51,12 +51,13 @@ public class BattleShipBoard<T> implements Board<T> {
    * @return true if success, false if not
    */
 
-  public boolean tryAddShip(Ship<T> toAdd) {
-    if(placementChecker.checkPlacement(toAdd, this)){
+  public String tryAddShip(Ship<T> toAdd) {
+    String mess = placementChecker.checkPlacement(toAdd, this);
+    if(mess == null){
       myShips.add(toAdd);
-      return true;
+      return null;
     }
-    return false;
+    return "That placement is invalid: " + mess + ".";
   }
 
   /*

@@ -2,9 +2,11 @@ package edu.duke.rf96.battleship;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -38,8 +40,8 @@ public class TextPlayerTest {
     // TextPlayer player = new TextPlayer("A", b1, sr, ps, factory);
 
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-    TextPlayer player = createTextPlayer("A", 10, 20, "B2V\nC8H\na4v\n", bytes);
-    // TextPlayer p2 = new TextPlayer("B", b2, sr, ps, factory);
+    TextPlayer player = createTextPlayer("A", 10, 20, "B2V\nC8H\na4v\nb4a\nh2H\n", bytes);
+    TextPlayer player2 = createTextPlayer("B", 10, 20, "", bytes);
 
     // App app = new App(p1,p2);
 
@@ -49,12 +51,16 @@ public class TextPlayerTest {
     expected[1] = new Placement(new Coordinate(2, 8), 'H');
     expected[2] = new Placement(new Coordinate(0, 4), 'V');
 
-    for (int i = 0; i < expected.length; i++) {
+    for (int i = 0; i < expected.length - 1; i++) {
       Placement p = player.readPlacement(prompt);
       assertEquals(p, expected[i]); // did we get the right Placement back
       assertEquals(prompt + "\n", bytes.toString()); // should have printed prompt and newline
       bytes.reset(); // clear out bytes for next time around
     }
+    // Placement p = player.readPlacement(prompt);
+    // assertEquals(prompt + "\n" + "That placement is invalid: it does not have the correct format\n", bytes.toString());
+
+    assertThrows(EOFException.class, () -> player2.readPlacement(prompt));
   }
 
   @Test
@@ -87,53 +93,57 @@ public class TextPlayerTest {
   @ResourceLock(value = Resources.SYSTEM_OUT, mode = ResourceAccessMode.READ_WRITE)
   public void test_do_placement_phase() throws IOException {
     // ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-    // TextPlayer player1 = createTextPlayer("A", 10, 20, "A2H\nT7H\nC7V\nP4H\nI3V\nM5H\nD1H\nN0V\nG2H\nM2V", bytes);
+    // TextPlayer player1 = createTextPlayer("A", 10, 20,
+    // "A2H\nT7H\nC7V\nP4H\nI3V\nM5H\nD1H\nN0V\nG2H\nM2V", bytes);
     // player1.doPlacementPhase();
-    // String message = "\n--------------------------------------------------------------------------------\n" +
-    //     "  0|1|2|3|4|5|6|7|8|9\n" +
-    //     "A  | | | | | | | | |  A\n" +
-    //     "B  | | | | | | | | |  B\n" +
-    //     "C  | | | | | | | | |  C\n" +
-    //     "D  | | | | | | | | |  D\n" +
-    //     "E  | | | | | | | | |  E\n" +
-    //     "F  | | | | | | | | |  F\n" +
-    //     "G  | | | | | | | | |  G\n" +
-    //     "H  | | | | | | | | |  H\n" +
-    //     "I  | | | | | | | | |  I\n" +
-    //     "J  | | | | | | | | |  J\n" +
-    //     "K  | | | | | | | | |  K\n" +
-    //     "L  | | | | | | | | |  L\n" +
-    //     "M  | | | | | | | | |  M\n" +
-    //     "N  | | | | | | | | |  N\n" +
-    //     "O  | | | | | | | | |  O\n" +
-    //     "P  | | | | | | | | |  P\n" +
-    //     "Q  | | | | | | | | |  Q\n" +
-    //     "R  | | | | | | | | |  R\n" +
-    //     "S  | | | | | | | | |  S\n" +
-    //     "T  | | | | | | | | |  T\n" +
-    //     "  0|1|2|3|4|5|6|7|8|9\n" + 
-    //     "--------------------------------------------------------------------------------\n" +
-    //     "Player A: you are going to place the following ships (which are all\n" +
-    //     "rectangular). For each ship, type the coordinate of the upper left\n" +
-    //     "side of the ship, followed by either H (for horizontal) or V (for\n" +
-    //     "vertical). For example M4H would place a ship horizontally starting\n" +
-    //     "at M4 and going to the right. You have\n\n" +
-    //     "2 \"Submarines\" ships that are 1x2\n" +
-    //     "3 \"Destroyers\" that are 1x3\n" +
-    //     "3 \"Battleships\" that are 1x4\n" +
-    //     "2 \"Carriers\" that are 1x6\n" +
-    //     "--------------------------------------------------------------------------------\n";
+    // String message =
+    // "\n--------------------------------------------------------------------------------\n"
+    // +
+    // " 0|1|2|3|4|5|6|7|8|9\n" +
+    // "A | | | | | | | | | A\n" +
+    // "B | | | | | | | | | B\n" +
+    // "C | | | | | | | | | C\n" +
+    // "D | | | | | | | | | D\n" +
+    // "E | | | | | | | | | E\n" +
+    // "F | | | | | | | | | F\n" +
+    // "G | | | | | | | | | G\n" +
+    // "H | | | | | | | | | H\n" +
+    // "I | | | | | | | | | I\n" +
+    // "J | | | | | | | | | J\n" +
+    // "K | | | | | | | | | K\n" +
+    // "L | | | | | | | | | L\n" +
+    // "M | | | | | | | | | M\n" +
+    // "N | | | | | | | | | N\n" +
+    // "O | | | | | | | | | O\n" +
+    // "P | | | | | | | | | P\n" +
+    // "Q | | | | | | | | | Q\n" +
+    // "R | | | | | | | | | R\n" +
+    // "S | | | | | | | | | S\n" +
+    // "T | | | | | | | | | T\n" +
+    // " 0|1|2|3|4|5|6|7|8|9\n" +
+    // "--------------------------------------------------------------------------------\n"
+    // +
+    // "Player A: you are going to place the following ships (which are all\n" +
+    // "rectangular). For each ship, type the coordinate of the upper left\n" +
+    // "side of the ship, followed by either H (for horizontal) or V (for\n" +
+    // "vertical). For example M4H would place a ship horizontally starting\n" +
+    // "at M4 and going to the right. You have\n\n" +
+    // "2 \"Submarines\" ships that are 1x2\n" +
+    // "3 \"Destroyers\" that are 1x3\n" +
+    // "3 \"Battleships\" that are 1x4\n" +
+    // "2 \"Carriers\" that are 1x6\n" +
+    // "--------------------------------------------------------------------------------\n";
 
     // String prompt = "Player A where do you want to place a Destroyer?";
 
     // String expected = message + prompt + "\n" +
-    //     " 0|1|2\n" +
-    //     "A | | A\n" +
-    //     "B | |d B\n" +
-    //     "C | |d C\n" +
-    //     "D | |d D\n" +
-    //     "E | | E\n" +
-    //     " 0|1|2\n";
+    // " 0|1|2\n" +
+    // "A | | A\n" +
+    // "B | |d B\n" +
+    // "C | |d C\n" +
+    // "D | |d D\n" +
+    // "E | | E\n" +
+    // " 0|1|2\n";
     // assertEquals(expected, bytes.toString());
 
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -159,8 +169,7 @@ public class TextPlayerTest {
     TextPlayer p1 = new TextPlayer("A", b1, in, out, factory);
 
     p1.doPlacementPhase();
-    
-    
+
     String expected = new String(expectedStream.readAllBytes()); // read all the data from our expectedStream
     String actual = bytes.toString();// get the String out of bytes
     assertEquals(expected, actual);

@@ -71,11 +71,11 @@ public class BattleShipBoardTest {
     
     Ship<Character> s4 = factory.makeCarrier(new Placement(new Coordinate(4, 4), 'V'));
 
-    assertTrue(b.tryAddShip(s1));
-    assertTrue(b.tryAddShip(s2));
+    assertNull(b.tryAddShip(s1));
+    assertNull(b.tryAddShip(s2));
 
-    assertTrue(b.tryAddShip(s3));
-    assertTrue(b.tryAddShip(s4));
+    assertNull(b.tryAddShip(s3));
+    assertNull(b.tryAddShip(s4));
 
     Character expected[][] = new Character[10][10];
     for(int i  = 0; i<4; i++){
@@ -95,28 +95,28 @@ public class BattleShipBoardTest {
     }
     
     Ship<Character> s5 = factory.makeBattleship(new Placement(new Coordinate(2, 1), 'H')); //Collision
-    assertFalse(b.tryAddShip(s5));
+    assertNotNull(b.tryAddShip(s5));
      
     Ship<Character> s6 = factory.makeCarrier(new Placement(new Coordinate(0, 2), 'V'));//Collision
-     assertFalse(b.tryAddShip(s6));
+     assertNotNull(b.tryAddShip(s6));
 
      Ship<Character> s7 = factory.makeBattleship(new Placement(new Coordinate(-1, 0), 'V'));//InBound 
-    assertFalse(b.tryAddShip(s7));
+    assertNotNull(b.tryAddShip(s7));
     Ship<Character> s8 = factory.makeBattleship(new Placement(new Coordinate(8, 0), 'V'));//InBound
 
-    assertFalse(b.tryAddShip(s8));
+    assertNotNull(b.tryAddShip(s8));
 
     Ship<Character> s9 = factory.makeCarrier(new Placement(new Coordinate(2, 6), 'H'));//InBound and Collision
-    assertFalse(b.tryAddShip(s9));
+    assertNotNull(b.tryAddShip(s9));
 
     Ship<Character> s10 = factory.makeCarrier(new Placement(new Coordinate(9, -1), 'H'));//InBound and Collision
-    assertFalse(b.tryAddShip(s10));
+    assertNotNull(b.tryAddShip(s10));
 
     Ship<Character> s11 = factory.makeCarrier(new Placement(new Coordinate(9, 0), 'V'));//Vertical Inbound
-    assertFalse(b.tryAddShip(s11));
+    assertNotNull(b.tryAddShip(s11));
 
     Ship<Character> s12 = factory.makeCarrier(new Placement(new Coordinate(-3, 5), 'V'));//InBound
-    assertFalse(b.tryAddShip(s12));
+    assertNotNull(b.tryAddShip(s12));
 
     checkWhatIsAtBoard(b, expected);
   }

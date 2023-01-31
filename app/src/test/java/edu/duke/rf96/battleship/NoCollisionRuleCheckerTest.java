@@ -20,12 +20,12 @@ public class NoCollisionRuleCheckerTest {
     b.tryAddShip(s1);
     b.tryAddShip(s2);
 
-    assertFalse(rule.checkPlacement(s1, b));
-    assertFalse(rule.checkPlacement(s2, b));
-    assertFalse(rule.checkPlacement(s4, b));
-    assertFalse(rule.checkPlacement(s3, b));
-    assertTrue(rule.checkPlacement(s5, b));
-    assertTrue(rule.checkPlacement(s6, b));
+    assertNotNull(rule.checkPlacement(s1, b));
+    assertNotNull(rule.checkPlacement(s2, b));
+    assertNotNull(rule.checkPlacement(s4, b));
+    assertNotNull(rule.checkPlacement(s3, b));
+    assertNull(rule.checkPlacement(s5, b));
+    assertNull(rule.checkPlacement(s6, b));
 
   }
 
@@ -56,16 +56,16 @@ public class NoCollisionRuleCheckerTest {
     Board<Character> b = new BattleShipBoard<Character>(10, 10, rule2);
     V1ShipFactory factory = new V1ShipFactory();
     Ship<Character> s1 = factory.makeBattleship(new Placement(new Coordinate(0, 0), 'H'));
-    assertTrue(rule2.checkPlacement(s1, b));
+    assertNull(rule2.checkPlacement(s1, b));
     
     Ship<Character> s2 = factory.makeCarrier(new Placement(new Coordinate(2, 2), 'H'));
-    assertTrue(rule2.checkPlacement(s1, b));
+    assertNull(rule2.checkPlacement(s1, b));
     
     Ship<Character> s3 = factory.makeSubmarine(new Placement(new Coordinate(4,9), 'V'));
-    assertTrue(rule2.checkPlacement(s1, b));
+    assertNull(rule2.checkPlacement(s1, b));
     
     Ship<Character> s4 = factory.makeCarrier(new Placement(new Coordinate(4, 4), 'V'));
-    assertTrue(rule2.checkPlacement(s1, b));
+    assertNull(rule2.checkPlacement(s1, b));
 
     b.tryAddShip(s1);
     b.tryAddShip(s2);
@@ -74,28 +74,28 @@ public class NoCollisionRuleCheckerTest {
     b.tryAddShip(s4);
 
     Ship<Character> s5 = factory.makeBattleship(new Placement(new Coordinate(2, 1), 'H')); //Collision
-    assertFalse(rule2.checkPlacement(s5, b));
+    assertNotNull(rule2.checkPlacement(s5, b));
      
     Ship<Character> s6 = factory.makeCarrier(new Placement(new Coordinate(0, 2), 'V'));//Collision
-     assertFalse(rule2.checkPlacement(s6, b));
+    assertNotNull(rule2.checkPlacement(s6, b));
 
      Ship<Character> s7 = factory.makeBattleship(new Placement(new Coordinate(-1, 0), 'V'));//InBound 
-    assertFalse(rule2.checkPlacement(s7, b));
+    assertNotNull(rule2.checkPlacement(s7, b));
 
     Ship<Character> s8 = factory.makeBattleship(new Placement(new Coordinate(8, 0), 'V'));//InBound
-    assertFalse(rule2.checkPlacement(s8, b));
+    assertNotNull(rule2.checkPlacement(s8, b));
 
     Ship<Character> s9 = factory.makeCarrier(new Placement(new Coordinate(2, 6), 'H'));//InBound and Collision
-    assertFalse(rule2.checkPlacement(s9, b));
+    assertNotNull(rule2.checkPlacement(s9, b));
 
     Ship<Character> s10 = factory.makeCarrier(new Placement(new Coordinate(9, -1), 'H'));//InBound and Collision
-    assertFalse(rule2.checkPlacement(s10, b));
+    assertNotNull(rule2.checkPlacement(s10, b));
 
     Ship<Character> s11 = factory.makeCarrier(new Placement(new Coordinate(9, 0), 'V'));//Vertical Inbound
-    assertFalse(rule2.checkPlacement(s11, b));
+    assertNotNull(rule2.checkPlacement(s11, b));
 
     Ship<Character> s12 = factory.makeCarrier(new Placement(new Coordinate(-3, 5), 'V'));//InBound
-    assertFalse(rule2.checkPlacement(s12, b));
+    assertNotNull(rule2.checkPlacement(s12, b));
   }
 
 }

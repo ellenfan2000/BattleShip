@@ -1,6 +1,7 @@
 package edu.duke.rf96.battleship;
 
 import java.io.BufferedReader;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -34,7 +35,10 @@ public class TextPlayer {
       
                       
   }
-
+  /**
+     this method fill the shipCreationMaps with each type of ships's
+     corresponding make ship method.
+   */
 
   protected void setupShipCreationMap(){
     shipCreationFns.put("Submarine", (p) -> shipFactory.makeSubmarine(p));
@@ -43,6 +47,9 @@ public class TextPlayer {
     shipCreationFns.put("Carrier", (p) -> shipFactory.makeCarrier(p));
   }
 
+  /**
+     this method add all needed ships to te shipsToPlace
+   */
   protected void setupShipCreationList(){
     shipsToPlace.addAll(Collections.nCopies(2, "Submarine"));
     shipsToPlace.addAll(Collections.nCopies(3, "Destroyer"));
@@ -57,8 +64,21 @@ public class TextPlayer {
   public Placement readPlacement(String prompt) throws IOException {
     out.println(prompt);
     String s = inputReader.readLine();
+    if(s==null){
+      throw new EOFException("Input stream is null");
+    }
+
+    while (true){
+      try{
+        Placement p = new Placement(s);
+        return p;
+      }catch(IllegalArgumentException ex){
+        out.println("That placement is invalid: it does not have the correct format.");
+        out.println(prompt);
+        s = inputReader.readLine();
+      }
+    }
     // System.out.println(s);
-    return new Placement(s);
   }
 
   /*
@@ -66,18 +86,19 @@ public class TextPlayer {
    * put a ship on board
    * and print the board
    */
-  // public void doOnePlacement() throws IOException {
-  // Placement p = readPlacement("Player " + name + " where do you want to place a
-  // Destroyer?");
-  // Ship<Character> s = shipFactory.makeDestroyer(p);
-  // theBoard.tryAddShip(s);
-  // out.print(view.displayMyOwnBoard());
-  // }
 
   public void doOnePlacement(String shipName, Function<Placement, Ship<Character>> createFn) throws IOException {
-    Placement p = readPlacement("Player " + name + " where do you want to place a " + shipName + "?");
-    Ship<Character> s = createFn.apply(p);
-    theBoard.tryAddShip(s);
+    while(true){
+      Placement p = readPlacement("Player " + name + " where do you want to place a " + shipName + "?");
+      Ship<Character> s = createFn.apply(p);
+      String error_message = theBoard.tryAddShip(s);
+      if(error_message!=null){
+        out.println(error_message);
+      }
+      else{
+        break;
+      }
+    }
     out.print(view.displayMyOwnBoard());
   }
 

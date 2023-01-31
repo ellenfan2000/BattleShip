@@ -19,6 +19,9 @@ public class Placement {
   public Placement(Coordinate w, char or) {
     where = w;
     orien = or;
+    if (orien != 'H' &&orien != 'V' ){
+       throw new IllegalArgumentException("That placement is invalid: it does not have the correct format.");
+    }
   }
 
   /*

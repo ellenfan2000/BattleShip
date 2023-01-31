@@ -11,6 +11,8 @@ public class PlacementTest {
     Placement p1 = new Placement(c1, 'H');
     assertEquals(p1.getCoordinate(), c1);
     assertEquals(p1.getOrientation(), 'H');
+
+    assertThrows(IllegalArgumentException.class, ()-> new Placement(c1,'G'));
   }
 
   @Test

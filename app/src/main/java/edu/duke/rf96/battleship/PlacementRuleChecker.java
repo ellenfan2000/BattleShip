@@ -15,7 +15,7 @@ public abstract class PlacementRuleChecker<T> {
     this.next = next;
   }
 
-  protected abstract boolean checkMyRule(Ship<T> theShip, Board<T> theBoard);
+  protected abstract String checkMyRule(Ship<T> theShip, Board<T> theBoard);
 
   
   /**
@@ -23,16 +23,17 @@ public abstract class PlacementRuleChecker<T> {
      @return false if one rule is not satisfied
      @return true if pass all rules 
    */
-  public boolean checkPlacement(Ship<T> theShip, Board<T> theBoard) {
+  public String checkPlacement(Ship<T> theShip, Board<T> theBoard) {
     // if we fail our own rule: stop the placement is not legal
-    if (!checkMyRule(theShip, theBoard)) {
-      return false;
+    String error_message = checkMyRule(theShip, theBoard);
+    if (error_message!= null) {
+      return error_message ;
     }
     // other wise, ask the rest of the chain.
     if (next != null) {
       return next.checkPlacement(theShip, theBoard);
     }
     // if there are no more rules, then the placement is legal
-    return true;
+    return null;
   }
 }

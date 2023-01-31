@@ -16,7 +16,7 @@ public interface Board<T> {
    * @param toAdd is the ship we want to add to the board
    * @return true if success, false if not
    */
-  public boolean tryAddShip(Ship<T> toAdd);
+  public String tryAddShip(Ship<T> toAdd);
 
   /**
    * This method takes a Coordinate, and sees which (if any) Ship
