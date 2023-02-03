@@ -24,7 +24,7 @@ public class TextPlayerTest {
   private TextPlayer createTextPlayer(String name, int w, int h, String inputData, OutputStream bytes) {
     BufferedReader input = new BufferedReader(new StringReader(inputData));
     PrintStream output = new PrintStream(bytes, true);
-    Board<Character> board = new BattleShipBoard<Character>(w, h);
+    Board<Character> board = new BattleShipBoard<Character>(w, h,'X');
     V1ShipFactory shipFactory = new V1ShipFactory();
     return new TextPlayer(name, board, input, output, shipFactory);
   }
@@ -163,7 +163,7 @@ public class TextPlayerTest {
     InputStream expectedStream = getClass().getClassLoader().getResourceAsStream("output2.txt");
     assertNotNull(expectedStream);
 
-    Board<Character> b1 = new BattleShipBoard<Character>(10, 20);
+    Board<Character> b1 = new BattleShipBoard<Character>(10, 20,'X');
     BufferedReader in = new BufferedReader(new InputStreamReader(input));
     V1ShipFactory factory = new V1ShipFactory();
     TextPlayer p1 = new TextPlayer("A", b1, in, out, factory);

@@ -32,13 +32,13 @@ public class RectangleShip<T> extends BasicShip<T> {
   /**
    * three types of constructors
    */
-  public RectangleShip(String n, Coordinate upperLeft, int width, int height, ShipDisplayInfo<T> info) {
-    super(makeCoords(upperLeft, width, height), info);
+  public RectangleShip(String n, Coordinate upperLeft, int width, int height, ShipDisplayInfo<T> myinfo,  ShipDisplayInfo<T> enminfo) {
+    super(makeCoords(upperLeft, width, height), myinfo, enminfo);
     this.name = n;
   }
 
   public RectangleShip(String n, Coordinate upperLeft, int width, int height, T data, T onHit) {
-    this(n, upperLeft, width, height, new SimpleShipDisplayInfo<T>(data, onHit));
+    this(n, upperLeft, width, height, new SimpleShipDisplayInfo<T>(data, onHit), new SimpleShipDisplayInfo<T>(null, data));
   }
 
   // a test version constructor

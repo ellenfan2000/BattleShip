@@ -1,5 +1,7 @@
 package edu.duke.rf96.battleship;
 
+import java.util.function.Function;
+
 /**
  * This class handles textual display of
  * a Board (i.e., converting it to a string to show
@@ -56,6 +58,10 @@ public class BoardTextView {
    * @return the string that is the board
    */
   public String displayMyOwnBoard() {
+   return displayAnyBoard((c)->toDisplay.whatIsAtForSelf(c));
+  }
+
+  protected String displayAnyBoard(Function<Coordinate, Character> getSquareFn){
     StringBuilder ans = new StringBuilder("");
 
     ans.append(this.makeHeader());
@@ -69,7 +75,7 @@ public class BoardTextView {
       // j for column
       for (int col = 0; col < toDisplay.getWidth(); col++) {
         ans.append(sep);
-        Character display = toDisplay.whatIsAt(new Coordinate(row, col));
+        Character display = getSquareFn.apply(new Coordinate(row, col));
         
         if (display == null){
           ans.append(" ");//no ship
@@ -86,6 +92,11 @@ public class BoardTextView {
     }
     ans.append(this.makeHeader());
     return ans.toString(); // this is a placeholder for the moment
+    
+  }
+
+  public String displayEnemyBoard(){
+    return displayAnyBoard((c)->toDisplay.whatIsAtForEnemy(c));
   }
 
 }

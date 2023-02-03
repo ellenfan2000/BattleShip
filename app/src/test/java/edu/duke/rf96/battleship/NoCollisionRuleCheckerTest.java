@@ -8,7 +8,7 @@ public class NoCollisionRuleCheckerTest {
   @Test
   public void test_checkMyRule() {
     PlacementRuleChecker<Character> rule = new NoCollisionRuleChecker<Character>(null);
-    Board<Character> b = new BattleShipBoard<Character>(10, 20, rule);
+    Board<Character> b = new BattleShipBoard<Character>(10, 20, rule,'X');
     V1ShipFactory factory = new V1ShipFactory();
     Ship<Character> s1 = factory.makeBattleship(new Placement(new Coordinate(0, 0), 'H'));
     Ship<Character> s2 = factory.makeCarrier(new Placement(new Coordinate(3, 2), 'H'));
@@ -53,7 +53,7 @@ public class NoCollisionRuleCheckerTest {
     PlacementRuleChecker<Character> rule1 = new InBoundsRuleChecker<Character>(null);
     PlacementRuleChecker<Character> rule2 = new NoCollisionRuleChecker<Character>(rule1);
 
-    Board<Character> b = new BattleShipBoard<Character>(10, 10, rule2);
+    Board<Character> b = new BattleShipBoard<Character>(10, 10, rule2,'X');
     V1ShipFactory factory = new V1ShipFactory();
     Ship<Character> s1 = factory.makeBattleship(new Placement(new Coordinate(0, 0), 'H'));
     assertNull(rule2.checkPlacement(s1, b));

@@ -24,5 +24,23 @@ public interface Board<T> {
    * displayInfo it has at those coordinates (for now, just 's'). If
    * none is found, we return null.
    */
-  public T whatIsAt(Coordinate where);
+  public T whatIsAtForSelf(Coordinate where);
+
+
+   /**
+     This method should search for any ship that occupies coordinate c
+If one is found, that Ship is "hit" by the attack and should
+record it.  Then we return this ship.
+
+   */
+  public Ship<T> fireAt(Coordinate c);
+
+
+  /**
+   * This method takes a Coordinate, and sees which (if any) Ship
+   * occupies that coordinate. If one is found, we return whatever
+   * displayInfo it has at those coordinates (for now, just 's'). If
+   * none is found, we return null.
+   */
+  public T whatIsAtForEnemy(Coordinate where);
 }

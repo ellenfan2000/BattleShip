@@ -81,11 +81,13 @@ public class RectangleShipTest {
 
     for(int row = 2; row < 3; row ++ ){
       for(int col = 5; col < 8; col++){
-        assertEquals('*', s.getDisplayInfoAt(new Coordinate(row, col)));
+        assertEquals('*', s.getDisplayInfoAt(new Coordinate(row, col), true));
+        assertEquals('s', s.getDisplayInfoAt(new Coordinate(row, col), false));
       }
     }
      for(int col = 5; col < 8; col++){
-        assertEquals('s', s.getDisplayInfoAt(new Coordinate(3, col)));
+       assertEquals('s', s.getDisplayInfoAt(new Coordinate(3, col),true));
+       assertNull(s.getDisplayInfoAt(new Coordinate(3, col),false));
       }
   }
   
