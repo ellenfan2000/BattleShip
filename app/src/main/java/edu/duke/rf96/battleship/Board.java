@@ -43,4 +43,6 @@ record it.  Then we return this ship.
    * none is found, we return null.
    */
   public T whatIsAtForEnemy(Coordinate where);
+
+  public Boolean isLose();
 }

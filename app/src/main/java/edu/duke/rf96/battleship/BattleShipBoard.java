@@ -76,26 +76,27 @@ public class BattleShipBoard<T> implements Board<T> {
     return whatIsAt(where, true);
   }
 
-  protected T whatIsAt(Coordinate where, boolean isSelf){
+  protected T whatIsAt(Coordinate where, boolean isSelf) {
     for (Ship<T> s : myShips) {
       if (s.occupiesCoordinates(where)) {
         return s.getDisplayInfoAt(where, isSelf);
       }
     }
-    if (!isSelf){
-      if (enemyMisses.contains(where)){
+    if (!isSelf) {
+      if (enemyMisses.contains(where)) {
         return missInfo;
       }
     }
     return null;
   }
+
   /**
-     @param c the coordinate been fired at
-     @return if hit, return the ship been hit
-     if not , return null
-   * This method should search for any ship that occupies coordinate c
-   * If one is found, that Ship is "hit" by the attack and should
-   * record it. Then we return this ship.
+   * @param c the coordinate been fired at
+   * @return if hit, return the ship been hit
+   *         if not , return null
+   *         This method should search for any ship that occupies coordinate c
+   *         If one is found, that Ship is "hit" by the attack and should
+   *         record it. Then we return this ship.
    */
 
   public Ship<T> fireAt(Coordinate c) {
@@ -112,5 +113,19 @@ public class BattleShipBoard<T> implements Board<T> {
 
   public T whatIsAtForEnemy(Coordinate where) {
     return whatIsAt(where, false);
+  }
+
+  /**
+   * the player lose if all of his ships sink
+   * 
+   * @return boolean indicate whether the player loses
+   */
+  public Boolean isLose() {
+    for (Ship<T> s : myShips) {
+      if (!s.isSunk()) {
+        return false;
+      }
+    }
+    return true;
   }
 }

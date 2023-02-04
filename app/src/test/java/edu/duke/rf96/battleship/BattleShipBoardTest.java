@@ -219,6 +219,39 @@ public class BattleShipBoardTest {
         assertEquals(expect[row][col],b.whatIsAtForEnemy(c));
       }
     }
+  }
+
+  @Test
+  public void test_isLose(){
+     String myView = "  0|1|2|3\n" +
+        "A  | | |d A\n" +
+        "B s|s| |d B\n" +
+        "C  | | |d C\n" +
+        "  0|1|2|3\n";
+    Board<Character> b = new BattleShipBoard<Character>(4, 3, 'X');
+    BoardTextView view = new BoardTextView(b);
+
+    V1ShipFactory factory = new V1ShipFactory();
+
+    Ship<Character> s1 = factory.makeSubmarine(new Placement(new Coordinate(1, 0), 'H'));
+
+    Ship<Character> s2 = factory.makeDestroyer(new Placement(new Coordinate(0, 3), 'V'));
+
+    assertNull(b.tryAddShip(s1));
+    assertNull(b.tryAddShip(s2));
+
+    b.fireAt(new Coordinate(1, 0));
+    b.fireAt(new Coordinate(1, 1));
+    assertFalse(b.isLose());
     
+    b.fireAt(new Coordinate(2, 1));// miss
+    b.fireAt(new Coordinate(2, 2));// miss
+    b.fireAt(new Coordinate(0, 3));
+    assertFalse(b.isLose());
+    b.fireAt(new Coordinate(2, 3));
+    b.fireAt(new Coordinate(1, 3));
+    b.fireAt(new Coordinate(0, 3));
+    assertTrue(b.isLose());
+     
   }
 }

@@ -95,10 +95,15 @@ public class BoardTextView {
     
   }
 
+  /**
+     to way to display my board to enemy
+   */
   public String displayEnemyBoard(){
     return displayAnyBoard((c)->toDisplay.whatIsAtForEnemy(c));
   }
 
+
+  
   public String displayMyBoardWithEnemyNextToIt(BoardTextView enemyView, String myHeader, String enemyHeader) {
     String[] myBoard = displayMyOwnBoard().split("\n");
     String[] enemyBoard = enemyView.displayEnemyBoard().split("\n");
