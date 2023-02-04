@@ -99,4 +99,31 @@ public class BoardTextView {
     return displayAnyBoard((c)->toDisplay.whatIsAtForEnemy(c));
   }
 
+  public String displayMyBoardWithEnemyNextToIt(BoardTextView enemyView, String myHeader, String enemyHeader) {
+    String[] myBoard = displayMyOwnBoard().split("\n");
+    String[] enemyBoard = enemyView.displayEnemyBoard().split("\n");
+
+    int w = toDisplay.getWidth();
+    String header = "";
+    for(int i = 0; i <5; i++ ){
+      header+=" ";
+    }
+    header += myHeader;
+    for(int i = header.length(); i < 2*w+22; i++){
+      header += " ";
+    }
+    header +=enemyHeader + "\n";
+
+    String body ="";
+    for(int j = 0; j < myBoard.length; j++){
+      String line = myBoard[j];
+      for(int k = line.length(); k < 2*w+19; k++){
+        line += " ";
+      }
+      line +=enemyBoard[j] + "\n";
+      body += line;
+    }
+
+    return header+body;
+  }
 }
