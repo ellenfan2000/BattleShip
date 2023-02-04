@@ -10,12 +10,12 @@ import java.util.HashMap;
 import java.util.function.Function;
 
 public class TextPlayer {
-  private final Board<Character> theBoard;
+  final Board<Character> theBoard;
   final BoardTextView view;
   final BufferedReader inputReader;
   final PrintStream out;
   final AbstractShipFactory<Character> shipFactory;
-  private final String name;
+  final String name;
   final ArrayList<String> shipsToPlace;
   final HashMap<String, Function<Placement, Ship<Character>>> shipCreationFns;
 
@@ -127,6 +127,49 @@ public class TextPlayer {
     for (String s:shipsToPlace){
       doOnePlacement(s, shipCreationFns.get(s));
     }
+  }
+
+   public Coordinate readCoordinate(String prompt) throws IOException {
+    out.println(prompt);
+    String s = inputReader.readLine();
+    if(s==null){
+      throw new EOFException("Input stream is null");
+    }
+
+    while (true){
+      try{
+        Coordinate c = new Coordinate(s);
+        if(c.getRow() >= theBoard.getHeight() || c.getColumn() >= theBoard.getWidth()){
+          throw new IllegalArgumentException("The coordinate is out of bound");
+        }
+        return c;
+      }catch(IllegalArgumentException ex){
+        out.println("That Coordinate is invalid: it does not have the correct format.");
+        out.println(prompt);
+        s = inputReader.readLine();
+      }
+    }
+   }
+  
+
+  public void playOneTurn(Board<Character> enemyBoard, BoardTextView enemyView, String myHeader, String enemyHeader) throws IOException{
+    out.println("---------------------------------------------------------------------------");
+    out.println("Player " + name + "'s turn:");
+    out.println(view.displayMyBoardWithEnemyNextToIt(enemyView, myHeader, enemyHeader));
+    out.println("---------------------------------------------------------------------------");
+    String prompt = "Player " + name + " where do you want to fire at?";
+    Coordinate c = readCoordinate(prompt);
+    Ship<Character> s = enemyBoard.fireAt(c);
+    out.println("---------------------------------------------------------------------------");
+    if(s != null){
+      out.println("You hit a "+s.getName() + "!");
+    }else{
+      out.println("You missed!");
+    }
+  }
+
+  public String getName(){
+    return name;
   }
 
 }

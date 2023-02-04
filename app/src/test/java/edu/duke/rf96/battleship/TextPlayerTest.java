@@ -92,59 +92,6 @@ public class TextPlayerTest {
   @Test
   @ResourceLock(value = Resources.SYSTEM_OUT, mode = ResourceAccessMode.READ_WRITE)
   public void test_do_placement_phase() throws IOException {
-    // ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-    // TextPlayer player1 = createTextPlayer("A", 10, 20,
-    // "A2H\nT7H\nC7V\nP4H\nI3V\nM5H\nD1H\nN0V\nG2H\nM2V", bytes);
-    // player1.doPlacementPhase();
-    // String message =
-    // "\n--------------------------------------------------------------------------------\n"
-    // +
-    // " 0|1|2|3|4|5|6|7|8|9\n" +
-    // "A | | | | | | | | | A\n" +
-    // "B | | | | | | | | | B\n" +
-    // "C | | | | | | | | | C\n" +
-    // "D | | | | | | | | | D\n" +
-    // "E | | | | | | | | | E\n" +
-    // "F | | | | | | | | | F\n" +
-    // "G | | | | | | | | | G\n" +
-    // "H | | | | | | | | | H\n" +
-    // "I | | | | | | | | | I\n" +
-    // "J | | | | | | | | | J\n" +
-    // "K | | | | | | | | | K\n" +
-    // "L | | | | | | | | | L\n" +
-    // "M | | | | | | | | | M\n" +
-    // "N | | | | | | | | | N\n" +
-    // "O | | | | | | | | | O\n" +
-    // "P | | | | | | | | | P\n" +
-    // "Q | | | | | | | | | Q\n" +
-    // "R | | | | | | | | | R\n" +
-    // "S | | | | | | | | | S\n" +
-    // "T | | | | | | | | | T\n" +
-    // " 0|1|2|3|4|5|6|7|8|9\n" +
-    // "--------------------------------------------------------------------------------\n"
-    // +
-    // "Player A: you are going to place the following ships (which are all\n" +
-    // "rectangular). For each ship, type the coordinate of the upper left\n" +
-    // "side of the ship, followed by either H (for horizontal) or V (for\n" +
-    // "vertical). For example M4H would place a ship horizontally starting\n" +
-    // "at M4 and going to the right. You have\n\n" +
-    // "2 \"Submarines\" ships that are 1x2\n" +
-    // "3 \"Destroyers\" that are 1x3\n" +
-    // "3 \"Battleships\" that are 1x4\n" +
-    // "2 \"Carriers\" that are 1x6\n" +
-    // "--------------------------------------------------------------------------------\n";
-
-    // String prompt = "Player A where do you want to place a Destroyer?";
-
-    // String expected = message + prompt + "\n" +
-    // " 0|1|2\n" +
-    // "A | | A\n" +
-    // "B | |d B\n" +
-    // "C | |d C\n" +
-    // "D | |d D\n" +
-    // "E | | E\n" +
-    // " 0|1|2\n";
-    // assertEquals(expected, bytes.toString());
 
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
     PrintStream out = new PrintStream(bytes, true);
@@ -174,5 +121,30 @@ public class TextPlayerTest {
     String actual = bytes.toString();// get the String out of bytes
     assertEquals(expected, actual);
   }
+  @Test
+  public void test_read_coor() throws IOException {
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    TextPlayer player = createTextPlayer("A", 10, 10, "B2\nC8\na4\nZ9\nD7\n", bytes);
+    TextPlayer player2 = createTextPlayer("B", 10,10, "", bytes);
 
+    // App app = new App(p1,p2);
+
+    String prompt = "Please enter a a location to hit at:";
+    Coordinate[] expected = new Coordinate[4];
+    expected[0] = new Coordinate(1, 2); 
+    expected[1] = new Coordinate(2, 8);
+    expected[2] = new Coordinate(0, 4);
+    expected[3] = new Coordinate(3, 7);
+
+    for (int i = 0; i < expected.length-1; i++) {
+     Coordinate p = player.readCoordinate(prompt);
+      assertEquals(p, expected[i]); // did we get the right Placement back
+      assertEquals(prompt + "\n", bytes.toString()); // should have printed prompt and newline
+      bytes.reset(); // clear out bytes for next time around
+    }
+    Coordinate p = player.readCoordinate(prompt);
+    assertEquals(prompt + "\n" + "That Coordinate is invalid: it does not have the correct format.\n" +prompt+ "\n", bytes.toString());
+
+    assertThrows(EOFException.class, () -> player2.readCoordinate(prompt));
+  }
 }

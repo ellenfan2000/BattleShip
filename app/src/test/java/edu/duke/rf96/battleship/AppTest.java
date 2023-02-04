@@ -19,7 +19,7 @@ import org.junit.jupiter.api.parallel.Resources;
 class AppTest {
   @Test
   @ResourceLock(value = Resources.SYSTEM_OUT, mode = ResourceAccessMode.READ_WRITE)
-  void test_main() throws IOException {
+  void test_main_Awin() throws IOException {
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
     PrintStream out = new PrintStream(bytes, true);
 
@@ -35,6 +35,43 @@ class AppTest {
     assertNotNull(input);
 
     InputStream expectedStream = getClass().getClassLoader().getResourceAsStream("output.txt");
+    assertNotNull(expectedStream);
+
+    InputStream oldIn = System.in;
+    PrintStream oldOut = System.out;
+
+    try {
+      System.setIn(input);
+      System.setOut(out);
+      App.main(new String[0]);
+    } finally {
+      System.setIn(oldIn);
+      System.setOut(oldOut);
+    }
+
+    String expected = new String(expectedStream.readAllBytes()); // read all the data from our expectedStream
+    String actual = bytes.toString();// get the String out of bytes
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  @ResourceLock(value = Resources.SYSTEM_OUT, mode = ResourceAccessMode.READ_WRITE)
+  void test_main_Bwin() throws IOException {
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    PrintStream out = new PrintStream(bytes, true);
+
+    /*
+     * asks the current class to give us its ClassLoader
+     * (the part of the Java runtime that reads classes from their files and sets
+     * them up in the JVM).
+     * Then we ask the ClassLaoder to find us a resource named "input.txt" and give
+     * us back
+     * an InputStream for it.
+     */
+    InputStream input = getClass().getClassLoader().getResourceAsStream("input3.txt");
+    assertNotNull(input);
+
+    InputStream expectedStream = getClass().getClassLoader().getResourceAsStream("output3.txt");
     assertNotNull(expectedStream);
 
     InputStream oldIn = System.in;

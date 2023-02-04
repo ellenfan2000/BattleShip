@@ -21,6 +21,29 @@ public class App {
     player2.doPlacementPhase();
   }
 
+  /**
+     This should let player1 play a turn, then
+   see if player 2 has lost. Then let player 2 play a turn and see if player 1 has lost.
+   It should repeat this until one player has lost, then report the outcome.
+   */
+  public void doAttackingPhase(Board<Character> b1,Board<Character> b2) throws IOException {
+    BoardTextView p1View = new BoardTextView(b1);
+    BoardTextView p2View = new BoardTextView(b2);
+    while(true){
+      player1.playOneTurn(b2,p2View,"Your Ocean", "Player " +player2.getName() + "'s Ocean" );
+      if(b2.isLose()){
+        System.out.println("Player "+ player1.getName() + " Win!");
+        break;
+      }
+      player2.playOneTurn(b1,p1View,"Your Ocean", "Player " +player1.getName() + "'s Ocean" );
+      if(b1.isLose()){
+        System.out.println("Player "+ player2.getName() + " Win!");
+        break;
+      }
+    }
+  }
+
+
   public static void main(String[] args) throws IOException {
 
     Board<Character> b1 = new BattleShipBoard<Character>(10, 20,'X');
@@ -32,6 +55,7 @@ public class App {
 
     App app = new App(p1, p2);
     app.doPlacementPhase();
+    app.doAttackingPhase(b1, b2);
 
   }
 

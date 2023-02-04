@@ -69,7 +69,7 @@ public class BattleShipBoard<T> implements Board<T> {
   /*
    * This method takes a Coordinate, and sees which (if any) Ship
    * occupies that coordinate. If one is found, we return whatever
-   * displayInfo it has at those coordinates (for now, just 's'). If
+   * displayInfo it has at those coordinates. If
    * none is found, we return null.
    */
   public T whatIsAtForSelf(Coordinate where) {
@@ -88,6 +88,10 @@ public class BattleShipBoard<T> implements Board<T> {
       }
     }
     return null;
+  }
+
+  public T whatIsAtForEnemy(Coordinate where) {
+    return whatIsAt(where, false);
   }
 
   /**
@@ -110,11 +114,7 @@ public class BattleShipBoard<T> implements Board<T> {
     return null;
 
   }
-
-  public T whatIsAtForEnemy(Coordinate where) {
-    return whatIsAt(where, false);
-  }
-
+  
   /**
    * the player lose if all of his ships sink
    * 
