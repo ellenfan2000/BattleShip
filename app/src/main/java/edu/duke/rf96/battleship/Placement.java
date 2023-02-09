@@ -13,13 +13,14 @@ public class Placement {
   // orientation V: vertical, H: horizontal
   private final char orien;
 
-  /*
+  /**
    * Construct a Placement
+   @param orientation: V,H,Up, Right, Down, Left
    */
   public Placement(Coordinate w, char or) {
     where = w;
     orien = or;
-    if (orien != 'H' &&orien != 'V' ){
+    if (orien != 'H' && orien != 'V' && orien != 'U' && orien != 'R' && orien != 'D' && orien != 'L'){
        throw new IllegalArgumentException("That placement is invalid: it does not have the correct format.");
     }
   }
@@ -38,8 +39,8 @@ public class Placement {
     char orienC = descr.charAt(2);
 
     where = new Coordinate(coorStr);
-    if (orienC != 'H' && orienC != 'V') {
-      throw new IllegalArgumentException("Placement Orientation should be H or V but is " + orienC);
+    if (orienC != 'H' && orienC != 'V' && orienC != 'U' && orienC != 'R' && orienC != 'D' && orienC != 'L'){
+       throw new IllegalArgumentException("That placement is invalid: it does not have the correct format.");
     }
     orien = orienC;
   }

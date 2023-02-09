@@ -30,22 +30,44 @@ public class PlacementTest {
     Placement p3 = new Placement("A3h");
     assertEquals(0, p3.getCoordinate().getRow());
     assertEquals(3, p3.getCoordinate().getColumn());
-    assertEquals('H', p1.getOrientation());
+    assertEquals('H', p3.getOrientation());
 
     Placement p4 = new Placement("a3H");
     assertEquals(0, p4.getCoordinate().getRow());
     assertEquals(3, p4.getCoordinate().getColumn());
-    assertEquals('H', p1.getOrientation());
+    assertEquals('H', p4.getOrientation());
+
+    Placement p5 = new Placement("a3U");
+    assertEquals(0, p5.getCoordinate().getRow());
+    assertEquals(3, p5.getCoordinate().getColumn());
+    assertEquals('U', p5.getOrientation());
+    
+    Placement p6 = new Placement("a3r");
+    assertEquals(0, p6.getCoordinate().getRow());
+    assertEquals(3, p6.getCoordinate().getColumn());
+    assertEquals('R', p6.getOrientation());
+
+    Placement p7 = new Placement("a3D");
+    assertEquals(0, p7.getCoordinate().getRow());
+    assertEquals(3, p7.getCoordinate().getColumn());
+    assertEquals('D', p7.getOrientation());
+    
+    Placement p8 = new Placement("a3L");
+    assertEquals(0, p8.getCoordinate().getRow());
+    assertEquals(3, p8.getCoordinate().getColumn());
+    assertEquals('L', p8.getOrientation());
+
+    
   }
 
   @Test
   public void test_string_construct_error() {
     assertThrows(IllegalArgumentException.class, () -> new Placement("123"));
-    assertThrows(IllegalArgumentException.class, () -> new Placement("A2D"));
+    assertThrows(IllegalArgumentException.class, () -> new Placement("A2f"));
     assertThrows(IllegalArgumentException.class, () -> new Placement("12."));
     assertThrows(IllegalArgumentException.class, () -> new Placement("C103"));
     assertThrows(IllegalArgumentException.class, () -> new Placement("A"));
-    assertThrows(IllegalArgumentException.class, () -> new Placement("A5d"));
+    assertThrows(IllegalArgumentException.class, () -> new Placement("A5k"));
   }
 
   @Test
