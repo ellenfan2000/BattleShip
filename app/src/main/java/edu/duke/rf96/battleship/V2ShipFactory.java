@@ -31,13 +31,13 @@ public class V2ShipFactory implements AbstractShipFactory<Character>  {
      }
 
      if(orien == 'U'){
-       return new TwoLineShip<Character>("Battleship", new Coordinate(row, col+1), 1, 1, new Coordinate(row+1, col), 3, 1, 'b','*');
+       return new TwoLineShip<Character>("Battleship", new Coordinate(row, col+1), 1, 1, new Coordinate(row+1, col), 3, 1, 'b','*', new Placement(new Coordinate(row, col+1),'U'));
      }else if(orien == 'R'){
-       return new TwoLineShip<Character>("Battleship", new Coordinate(row+1, col+1), 1, 1,new Coordinate(row, col), 1, 3, 'b','*');
+       return new TwoLineShip<Character>("Battleship", new Coordinate(row+1, col+1), 1, 1,new Coordinate(row, col), 1, 3, 'b','*', new Placement(new Coordinate(row+1, col+1),'R'));
      }else if(orien == 'D'){
-       return new TwoLineShip<Character>("Battleship", new Coordinate(row+1, col+1), 1, 1,new Coordinate(row, col), 3, 1, 'b','*');
+       return new TwoLineShip<Character>("Battleship", new Coordinate(row+1, col+1), 1, 1,new Coordinate(row, col), 3, 1, 'b','*', new Placement(new Coordinate(row+1, col+1),'D'));
      }else{
-       return new TwoLineShip<Character>("Battleship", new Coordinate(row+1, col), 1, 1, new Coordinate(row, col+1), 1, 3, 'b','*');
+       return new TwoLineShip<Character>("Battleship", new Coordinate(row+1, col), 1, 1, new Coordinate(row, col+1), 1, 3, 'b','*', new Placement(new Coordinate(row+1, col),'L'));
      }
      
   }
@@ -59,13 +59,13 @@ public class V2ShipFactory implements AbstractShipFactory<Character>  {
      }
 
      if(orien == 'U'){
-       return new TwoLineShip<Character>("Carrier",new Coordinate(row+2, col+1), 1, 3, new Coordinate(row, col), 1, 4, 'c','*');
+       return new TwoLineShip<Character>("Carrier",new Coordinate(row+2, col+1), 1, 3, new Coordinate(row, col), 1, 4, 'c','*', new Placement(new Coordinate(row, col),'U'));
      }else if(orien == 'R'){
-       return new TwoLineShip<Character>("Carrier",new Coordinate(row+1, col), 3, 1, new Coordinate(row, col+1), 4, 1, 'c','*');
+       return new TwoLineShip<Character>("Carrier",new Coordinate(row+1, col), 3, 1, new Coordinate(row, col+1), 4, 1, 'c','*',new Placement(new Coordinate(row, col+4),'R'));
      }else if(orien == 'D'){
-       return new TwoLineShip<Character>("Carrier", new Coordinate(row, col), 1, 3, new Coordinate(row+1, col+1), 1, 4, 'c','*');
+       return new TwoLineShip<Character>("Carrier", new Coordinate(row, col), 1, 3, new Coordinate(row+1, col+1), 1, 4, 'c','*',new Placement(new Coordinate(row+4, col+1),'D'));
      }else{
-       return new TwoLineShip<Character>("Carrier", new Coordinate(row, col+2), 3, 1, new Coordinate(row+1, col), 4, 1, 'c','*');
+       return new TwoLineShip<Character>("Carrier", new Coordinate(row, col+2), 3, 1, new Coordinate(row+1, col), 4, 1, 'c','*',new Placement(new Coordinate(row+1, col),'L'));
      }
      
 

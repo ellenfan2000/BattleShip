@@ -114,7 +114,7 @@ public class BattleShipBoard<T> implements Board<T> {
     return null;
 
   }
-  
+
   /**
    * the player lose if all of his ships sink
    * 
@@ -127,5 +127,39 @@ public class BattleShipBoard<T> implements Board<T> {
       }
     }
     return true;
+  }
+
+  protected Ship<T> whichShipisAt(Coordinate where) {
+    for (Ship<T> s : myShips) {
+      if (s.occupiesCoordinates(where)) {
+        return s;
+      }
+    }
+    return null;
+
+  }
+
+  /**
+  
+     package edu.duke.rf96.battleship;
+
+public class BattleShipBoard {
+
+}
+
+   */
+  public String tryMoveShip(Ship<T> newShip,Ship<T> toMove) {
+    myShips.remove(toMove);
+    String mess = tryAddShip(newShip);
+    if (mess == null) {
+      for (Coordinate c : toMove.getCoordinates()) {
+        if (toMove.wasHitAt(c)) {
+          Coordinate relative = toMove.getRelativeCoordinate(c);
+          newShip.recordHitAt(newShip.getDefinCoordinate(relative));
+        }
+      }
+      return null;
+    }
+    return mess;
   }
 }

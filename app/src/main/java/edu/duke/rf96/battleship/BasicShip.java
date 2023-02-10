@@ -19,16 +19,17 @@ public abstract class BasicShip<T> implements Ship<T> {
   protected HashMap<Coordinate, Boolean> myPieces;
   protected ShipDisplayInfo<T> myDisplayInfo;
   protected ShipDisplayInfo<T> enemyDisplayInfo;
+  protected Placement center;
   
 
-  public BasicShip(Iterable<Coordinate> where, ShipDisplayInfo<T> myDisplayInfo, ShipDisplayInfo<T> enDisplayInfo ) {
+  public BasicShip(Iterable<Coordinate> where, ShipDisplayInfo<T> myDisplayInfo, ShipDisplayInfo<T> enDisplayInfo, Placement center) {
     myPieces = new HashMap<Coordinate, Boolean>();
     for (Coordinate c : where) {
       myPieces.put(c, false);
     }
     this.myDisplayInfo = myDisplayInfo;
     this.enemyDisplayInfo = enDisplayInfo;
-
+    this.center = center;
   }
 
   /**
@@ -88,8 +89,81 @@ public abstract class BasicShip<T> implements Ship<T> {
    * 
    * @return An Iterable with the coordinates that this Ship occupies
    */
+   @Override
   public Iterable<Coordinate> getCoordinates() {
     return myPieces.keySet();
   }
 
+  @Override
+  public Coordinate getCenter(){
+    return center.getCoordinate();
+  }
+
+  /**
+     Calculate the relative position to the center point in the
+     up or horizontal view. 
+   */
+  
+   @Override
+  public Coordinate getRelativeCoordinate(Coordinate defini){
+    checkCoordinateInThisShip(defini);
+    int row = defini.getRow() - center.getCoordinate().getRow();
+    int col = defini.getColumn() - center.getCoordinate().getColumn();
+    Character orien = center.getOrientation();
+    if(orien == 'U'){
+      return new Coordinate(row, col);
+    }
+    else if(orien == 'R'){
+      return new Coordinate(0-col,row);
+    }
+    else if(orien == 'D'){
+      return new Coordinate(0-row,0-col);
+    }
+    else if(orien == 'L'){
+      return new Coordinate(col,0-row);
+    }
+    else if(orien == 'H'){
+      return new Coordinate(row, col);
+    }
+    else{
+      return new Coordinate(col, row);
+    }
+  }
+
+   @Override
+  public Coordinate getDefinCoordinate(Coordinate relat){
+     int row = center.getCoordinate().getRow();
+     int col = center.getCoordinate().getColumn();
+    Character orien = center.getOrientation();
+    if(orien == 'U'){
+      row +=relat.getRow();
+      col +=relat.getColumn();
+      return new Coordinate(row, col);
+    }
+    else if(orien == 'D'){
+      row -=relat.getRow();
+      col -=relat.getColumn();
+      return new Coordinate(row, col);
+    }
+    else if(orien == 'R'){
+      row +=relat.getColumn();
+      col -=relat.getRow();
+      return new Coordinate(row,col);
+    }
+    else if(orien == 'L'){
+      row -=relat.getColumn();
+      col +=relat.getRow();
+      return new Coordinate(row,col);
+    }
+    else if(orien == 'H'){
+      row +=relat.getRow();
+      col +=relat.getColumn();
+      return new Coordinate(row, col);
+    }
+    else{
+      row +=relat.getColumn();
+      col +=relat.getRow();
+     return new Coordinate(row, col);
+    }
+  }
 }

@@ -254,4 +254,77 @@ public class BattleShipBoardTest {
     assertTrue(b.isLose());
      
   }
+
+   @Test
+  public void test_whichshipisat(){
+     PlacementRuleChecker<Character> rule1 = new InBoundsRuleChecker<Character>(null);
+    PlacementRuleChecker<Character> rule2 = new NoCollisionRuleChecker<Character>(rule1);
+    BattleShipBoard<Character> b = new BattleShipBoard<Character>(10, 10, rule2,'X');
+    V2ShipFactory factory = new V2ShipFactory();
+
+    Ship<Character> s1 = factory.makeBattleship(new Placement(new Coordinate(0, 1), 'U'));
+    Ship<Character> s3 = factory.makeSubmarine(new Placement(new Coordinate(0,5), 'H'));
+    Ship<Character> s4 = factory.makeCarrier(new Placement(new Coordinate(7, 2), 'L'));
+    Ship<Character> s5 = factory.makeBattleship(new Placement(new Coordinate(2, 5), 'R'));
+
+    assertNull(b.tryAddShip(s1));
+
+    assertNull(b.tryAddShip(s3));
+    assertNull(b.tryAddShip(s4));
+    assertNull(b.tryAddShip(s5));
+
+    assertEquals(s1, b.whichShipisAt(new Coordinate(1,2)));
+    assertEquals(s3, b.whichShipisAt(new Coordinate(0,6)));
+     assertEquals(s4, b.whichShipisAt(new Coordinate(8,2)));
+     assertNull(b.whichShipisAt(new Coordinate(0, 0)));
+
+   }
+
+  @Test
+  public void test_moveShip(){
+    PlacementRuleChecker<Character> rule1 = new InBoundsRuleChecker<Character>(null);
+    PlacementRuleChecker<Character> rule2 = new NoCollisionRuleChecker<Character>(rule1);
+    BattleShipBoard<Character> b = new BattleShipBoard<Character>(10, 10, rule2,'X');
+    V2ShipFactory factory = new V2ShipFactory();
+
+    Ship<Character> s1 = factory.makeBattleship(new Placement(new Coordinate(0, 1), 'U'));
+    Ship<Character> s3 = factory.makeSubmarine(new Placement(new Coordinate(0,5), 'H'));
+
+    Ship<Character> s2 = factory.makeCarrier(new Placement(new Coordinate(3, 2), 'D'));
+    Ship<Character> s4 = factory.makeCarrier(new Placement(new Coordinate(7, 0), 'L'));
+    Ship<Character> s5 = factory.makeBattleship(new Placement(new Coordinate(2, 5), 'R'));
+
+    Ship<Character> s6 = factory.makeSubmarine(new Placement(new Coordinate(0,5), 'V'));
+    Ship<Character> s7 = factory.makeBattleship(new Placement(new Coordinate(5,7), 'D'));
+    Ship<Character> s8 = factory.makeBattleship(new Placement(new Coordinate(0,1), 'D'));
+    
+
+    assertNull(b.tryAddShip(s1));
+
+    assertNull(b.tryAddShip(s3));
+    assertNull(b.tryAddShip(s4));
+    assertNull(b.tryAddShip(s5));
+
+    b.fireAt(new Coordinate(0, 6));
+    b.fireAt(new Coordinate(4, 5));
+    b.fireAt(new Coordinate(3, 6));
+    b.fireAt(new Coordinate(8, 1));
+    b.fireAt(new Coordinate(8, 3));
+    // // System.out.print(view.displayMyOwnBoard());
+
+    assertNull(b.tryMoveShip(s6, s3));
+    assertNull(b.tryMoveShip(s7, s5));
+    assertNull(b.tryMoveShip(s2, s4));
+    assertNotNull(b.tryMoveShip(s8, s5));
+    //System.out.print(view.displayMyOwnBoard());
+
+    assertTrue(s6.wasHitAt(new Coordinate(1,5)));
+    assertTrue(s2.wasHitAt(new Coordinate(4,3)));
+    assertTrue(s2.wasHitAt(new Coordinate(6,3)));
+    assertTrue(s7.wasHitAt(new Coordinate(5,7)));
+    assertTrue(s7.wasHitAt(new Coordinate(6,8)));
+    
+
+    
+  }
 }
