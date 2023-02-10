@@ -2,6 +2,8 @@ package edu.duke.rf96.battleship;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.HashMap;
+
 import org.junit.jupiter.api.Test;
 
 public class BattleShipBoardTest {
@@ -324,7 +326,46 @@ public class BattleShipBoardTest {
     assertTrue(s7.wasHitAt(new Coordinate(5,7)));
     assertTrue(s7.wasHitAt(new Coordinate(6,8)));
     
-
     
   }
+
+ @Test
+  public void test_Sonar(){
+   PlacementRuleChecker<Character> rule1 = new InBoundsRuleChecker<Character>(null);
+    PlacementRuleChecker<Character> rule2 = new NoCollisionRuleChecker<Character>(rule1);
+    BattleShipBoard<Character> b = new BattleShipBoard<Character>(10, 10, rule2,'X');
+    V2ShipFactory factory = new V2ShipFactory();
+
+    Ship<Character> s1 = factory.makeBattleship(new Placement(new Coordinate(0, 1), 'U'));
+    Ship<Character> s2 = factory.makeSubmarine(new Placement(new Coordinate(0,5), 'H'));
+    Ship<Character> s3 = factory.makeCarrier(new Placement(new Coordinate(7, 0), 'L'));
+    Ship<Character> s4 = factory.makeBattleship(new Placement(new Coordinate(2, 5), 'R'));
+
+
+    assertNull(b.tryAddShip(s1));
+    assertNull(b.tryAddShip(s2));
+    assertNull(b.tryAddShip(s3));
+    assertNull(b.tryAddShip(s4));
+    
+    HashMap<String,Integer> result1 = b.sonarScan(new Coordinate(3,4));
+    assertEquals(5, result1.get("Battleship"));
+    assertNull(result1.get("Submarine"));
+    assertNull(result1.get("Carrier"));
+
+    assertThrows(IllegalArgumentException.class, ()->b.sonarScan(new Coordinate(10,9)));
+    
+    
+    HashMap<String,Integer> result2 = b.sonarScan(new Coordinate(0,8));
+    assertEquals(2, result2.get("Submarine"));
+    assertNull(result2.get("Carrier"));
+    assertNull(result2.get("Battleship"));
+
+
+     HashMap<String,Integer> result3 = b.sonarScan(new Coordinate(8,1));
+    assertEquals(6, result3.get("Carrier"));
+    assertNull(result3.get("Submarine"));
+    assertNull(result3.get("Battleship"));
+   
+   
+ }
 }

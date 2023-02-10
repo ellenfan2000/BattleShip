@@ -166,4 +166,18 @@ public abstract class BasicShip<T> implements Ship<T> {
      return new Coordinate(row, col);
     }
   }
+
+  @Override
+  public String getType(){
+    if(myPieces.size() == 2){
+      return "Submarine";
+    }else if(myPieces.size() == 3){
+      return "Destroyer";
+    }else if(myPieces.size() == 4){
+      return "Battleship";
+    }else{
+      return "Carrier";
+    }
+    
+  }
 }

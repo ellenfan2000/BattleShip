@@ -74,4 +74,6 @@ public interface Ship<T> {
   public Coordinate getDefinCoordinate(Coordinate relat);
 
   public Coordinate getCenter();
+
+  public String getType();
 }

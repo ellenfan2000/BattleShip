@@ -106,4 +106,19 @@ public class TwoLineShipTest {
     
   }
 
+  @Test
+  public void test_getType() {
+    Coordinate c1 = new Coordinate(2, 5);
+    V2ShipFactory fac = new V2ShipFactory();
+    Ship<Character> s1 = fac.makeBattleship(new Placement(c1, 'U'));
+    Ship<Character> s2 = fac.makeCarrier(new Placement(c1, 'U'));
+    Ship<Character> s3 = fac.makeSubmarine(new Placement(c1, 'H'));
+    Ship<Character> s4 = fac.makeDestroyer(new Placement(c1, 'H'));
+    assertEquals("Battleship", s1.getType());
+    assertEquals("Carrier", s2.getType());
+    assertEquals("Submarine", s3.getType());
+    assertEquals("Destroyer", s4.getType());
+    
+  }
+
 }

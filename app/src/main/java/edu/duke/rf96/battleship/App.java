@@ -6,6 +6,7 @@ package edu.duke.rf96.battleship;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.EOFException;
 
 public class App {
   private final TextPlayer player1;
@@ -16,46 +17,134 @@ public class App {
     player2 = p2;
   }
 
-  public void doPlacementPhase() throws IOException {
-    player1.doPlacementPhase();
-    player2.doPlacementPhase();
+  // public void doPlacementPhase() throws IOException {
+  // player1.doPlacementPhase();
+  // player2.doPlacementPhase();
+  // }
+
+  public void doPlacementPhaseV2() throws IOException {
+    player1.doPlacementPhaseV2();
+    player2.doPlacementPhaseV2();
   }
 
   /**
-     This should let player1 play a turn, then
-   see if player 2 has lost. Then let player 2 play a turn and see if player 1 has lost.
-   It should repeat this until one player has lost, then report the outcome.
+   * This should let player1 play a turn, then
+   * see if player 2 has lost. Then let player 2 play a turn and see if player 1
+   * has lost.
+   * It should repeat this until one player has lost, then report the outcome.
    */
-  public void doAttackingPhase(Board<Character> b1,Board<Character> b2) throws IOException {
+  // public void doAttackingPhase(Board<Character> b1,Board<Character> b2) throws
+  // IOException {
+  // BoardTextView p1View = new BoardTextView(b1);
+  // BoardTextView p2View = new BoardTextView(b2);
+  // while(true){
+  // player1.playOneTurn(b2,p2View,"Your Ocean", "Player " +player2.getName() +
+  // "'s Ocean" );
+  // if(b2.isLose()){
+  // System.out.println("Player "+ player1.getName() + " Win!");
+  // break;
+  // }
+  // player2.playOneTurn(b1,p1View,"Your Ocean", "Player " +player1.getName() +
+  // "'s Ocean" );
+  // if(b1.isLose()){
+  // System.out.println("Player "+ player2.getName() + " Win!");
+  // break;
+  // }
+  // }
+  // }
+
+  public void doV2PlayPhase(Board<Character> b1, Board<Character> b2) throws IOException {
     BoardTextView p1View = new BoardTextView(b1);
     BoardTextView p2View = new BoardTextView(b2);
-    while(true){
-      player1.playOneTurn(b2,p2View,"Your Ocean", "Player " +player2.getName() + "'s Ocean" );
-      if(b2.isLose()){
-        System.out.println("Player "+ player1.getName() + " Win!");
+    while (true) {
+      player1.playOneTurnV2(b2, p2View, "Your Ocean", "Player " + player2.getName() + "'s Ocean");
+      if (b2.isLose()) {
+        System.out.println("Player " + player1.getName() + " Win!");
         break;
       }
-      player2.playOneTurn(b1,p1View,"Your Ocean", "Player " +player1.getName() + "'s Ocean" );
-      if(b1.isLose()){
-        System.out.println("Player "+ player2.getName() + " Win!");
+      player2.playOneTurnV2(b1, p1View, "Your Ocean", "Player " + player1.getName() + "'s Ocean");
+      if (b1.isLose()) {
+        System.out.println("Player " + player2.getName() + " Win!");
         break;
+      }
+    }
+
+  }
+
+  public static Character readRole(BufferedReader inputReader, String prompt) throws IOException {
+    System.out.println(prompt);
+    while (true) {
+      try {
+        String s = inputReader.readLine();
+        if (s == null) {
+          throw new EOFException("Input stream is null");
+        }
+        s = s.toUpperCase();
+        if (s.length() != 1) {
+          throw new IllegalArgumentException("Invalid input");
+        }
+        char choice = s.charAt(0);
+        if (choice != 'H' && choice != 'C') {
+          throw new IllegalArgumentException("Invalid input");
+        }
+        return choice;
+      } catch (IllegalArgumentException ex) {
+        System.out.println("That choice is invalid, please input another choice");
       }
     }
   }
 
+  // public static void main(String[] args) throws IOException {
+
+  // Board<Character> b1 = new BattleShipBoard<Character>(10, 20,'X');
+  // Board<Character> b2 = new BattleShipBoard<Character>(10, 20,'X');
+  // BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+  // //V1ShipFactory factory = new V1ShipFactory();
+  // V2ShipFactory factory = new V2ShipFactory();
+  // TextPlayer p1 = new TextPlayer("A", b1, input, System.out, factory);
+  // TextPlayer p2 = new TextPlayer("B", b2, input, System.out, factory);
+
+  // App app = new App(p1, p2);
+  // app.doPlacementPhaseV2();
+  // //app.doAttackingPhase(b1, b2);
+  // app.doV2PlayPhase(b1, b2);
+
+  // }
 
   public static void main(String[] args) throws IOException {
 
-    Board<Character> b1 = new BattleShipBoard<Character>(10, 20,'X');
-    Board<Character> b2 = new BattleShipBoard<Character>(10, 20,'X');
+    Board<Character> b1 = new BattleShipBoard<Character>(10, 20, 'X');
+    Board<Character> b2 = new BattleShipBoard<Character>(10, 20, 'X');
     BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-    V1ShipFactory factory = new V1ShipFactory();
-    TextPlayer p1 = new TextPlayer("A", b1, input, System.out, factory);
-    TextPlayer p2 = new TextPlayer("B", b2, input, System.out, factory);
+    // V1ShipFactory factory = new V1ShipFactory();
+    V2ShipFactory factory = new V2ShipFactory();
+    System.out.print("Welcome to Battleship game, please choose role! ");
+    System.out.println("Possible roles are");
+    System.out.println("Player 1 :");
+    System.out.println("H human player \nC Computer player\n");
+    System.out.println("Player 2 :");
+    System.out.println("H human player \nC Computer player\n");
 
+    Character role1 = App.readRole(input, "What role do you want player 1 be?");
+    Character role2 = App.readRole(input, "What role do you want player 2 be?");
+
+    TextPlayer p1, p2;
+
+    if (role1 == 'C') {
+      p1 = new ComputerPlayer("A", b1, input, System.out, factory);
+    } else {
+      p1 = new TextPlayer("A", b1, input, System.out, factory);
+    }
+
+    if (role2 == 'C') {
+      p2 = new ComputerPlayer("B", b2, input, System.out, factory);
+    } else {
+      p2 = new TextPlayer("B", b2, input, System.out, factory);
+    }
     App app = new App(p1, p2);
-    app.doPlacementPhase();
-    app.doAttackingPhase(b1, b2);
+    app.doPlacementPhaseV2();
+    // app.doAttackingPhase(b1, b2);
+    app.doV2PlayPhase(b1, b2);
 
   }
 

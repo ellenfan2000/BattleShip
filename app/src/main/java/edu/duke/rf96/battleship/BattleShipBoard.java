@@ -1,6 +1,7 @@
 package edu.duke.rf96.battleship;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class BattleShipBoard<T> implements Board<T> {
@@ -9,6 +10,7 @@ public class BattleShipBoard<T> implements Board<T> {
   private final ArrayList<Ship<T>> myShips;
   private final PlacementRuleChecker<T> placementChecker;
   private HashSet<Coordinate> enemyMisses;
+  private HashMap<Coordinate,T> enemyHits;
   private final T missInfo;
 
   /**
@@ -36,6 +38,7 @@ public class BattleShipBoard<T> implements Board<T> {
     myShips = new ArrayList<Ship<T>>();
     placementChecker = rc;
     enemyMisses = new HashSet<Coordinate>();
+    enemyHits = new HashMap<Coordinate,T>();
     missInfo = mi;
   }
 
@@ -77,12 +80,17 @@ public class BattleShipBoard<T> implements Board<T> {
   }
 
   protected T whatIsAt(Coordinate where, boolean isSelf) {
-    for (Ship<T> s : myShips) {
-      if (s.occupiesCoordinates(where)) {
-        return s.getDisplayInfoAt(where, isSelf);
+    if(isSelf){
+      for (Ship<T> s : myShips) {
+        if (s.occupiesCoordinates(where)) {
+          return s.getDisplayInfoAt(where, isSelf);
+        }
       }
     }
     if (!isSelf) {
+      if (enemyHits.containsKey(where)){
+        return enemyHits.get(where);
+      }
       if (enemyMisses.contains(where)) {
         return missInfo;
       }
@@ -107,6 +115,7 @@ public class BattleShipBoard<T> implements Board<T> {
     for (Ship<T> s : myShips) {
       if (s.occupiesCoordinates(c)) {
         s.recordHitAt(c);
+        enemyHits.put(c,s.getDisplayInfoAt(c, false));
         return s;
       }
     }
@@ -129,7 +138,13 @@ public class BattleShipBoard<T> implements Board<T> {
     return true;
   }
 
-  protected Ship<T> whichShipisAt(Coordinate where) {
+  /**
+   * @param where: the coordinate take by the ship
+   * @return the ship that takes the coordinate
+   *         null is there is no ship
+   */
+
+  public Ship<T> whichShipisAt(Coordinate where) {
     for (Ship<T> s : myShips) {
       if (s.occupiesCoordinates(where)) {
         return s;
@@ -140,15 +155,12 @@ public class BattleShipBoard<T> implements Board<T> {
   }
 
   /**
-  
-     package edu.duke.rf96.battleship;
-
-public class BattleShipBoard {
-
-}
-
+   * @param newship is the same type of ship newly created as
+   *                the result of move
+   * @param toMove  is the old ship
+   * @return return null is success, else return add failure
    */
-  public String tryMoveShip(Ship<T> newShip,Ship<T> toMove) {
+  public String tryMoveShip(Ship<T> newShip, Ship<T> toMove) {
     myShips.remove(toMove);
     String mess = tryAddShip(newShip);
     if (mess == null) {
@@ -160,6 +172,45 @@ public class BattleShipBoard {
       }
       return null;
     }
+    myShips.add(toMove);
     return mess;
+  }
+
+  /**
+   * @param C the center of sonar
+   * @return a hashmap of how many sqares each type of ship takes
+   */
+  public HashMap<String, Integer> sonarScan(Coordinate C) {
+    HashMap<String, Integer> ans = new HashMap<String, Integer>();
+    if (C.getRow() < 0 || C.getRow() >= height || C.getColumn() < 0 || C.getColumn() >= width) {
+      throw new IllegalArgumentException("Invalid Coordinate");
+    }
+    int top = C.getRow() - 3;
+    for (int line = 0; line < 7; line++) {
+      int row = top + line;
+      if (row < 0) {
+        continue;
+      } else if (row >= height) {
+        break;
+      } else {
+        for (int col = C.getColumn() + Math.abs(3 - line) - 3; col <= C.getColumn() - Math.abs(3 - line) + 3; col++) {
+          if (col < 0) {
+            continue;
+          }
+          if (col >= width) {
+            break;
+          }
+          Ship<T> s = whichShipisAt(new Coordinate(row, col));
+          if (s != null) {
+            if (ans.get(s.getName()) == null) {
+              ans.put(s.getName(), 1);
+            } else {
+              ans.replace(s.getName(), ans.get(s.getName()) + 1);
+            }
+          }
+        }
+      }
+    }
+    return ans;
   }
 }

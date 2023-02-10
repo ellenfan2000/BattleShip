@@ -5,11 +5,15 @@ package edu.duke.rf96.battleship;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.io.StringReader;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.ResourceAccessMode;
@@ -72,6 +76,87 @@ class AppTest {
     assertNotNull(input);
 
     InputStream expectedStream = getClass().getClassLoader().getResourceAsStream("output3.txt");
+    assertNotNull(expectedStream);
+
+    InputStream oldIn = System.in;
+    PrintStream oldOut = System.out;
+
+    try {
+      System.setIn(input);
+      System.setOut(out);
+      App.main(new String[0]);
+    } finally {
+      System.setIn(oldIn);
+      System.setOut(oldOut);
+    }
+
+    String expected = new String(expectedStream.readAllBytes()); // read all the data from our expectedStream
+    String actual = bytes.toString();// get the String out of bytes
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  void test_read_role()throws IOException{
+
+    assertThrows(EOFException.class,()-> App.readRole(new BufferedReader(new StringReader("")), "Please choosea role"));
+    
+  }
+
+  @Test
+  @ResourceLock(value = Resources.SYSTEM_OUT, mode = ResourceAccessMode.READ_WRITE)
+  void test_Computer_to_Computer() throws IOException{
+     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    PrintStream out = new PrintStream(bytes, true);
+
+    /*
+     * asks the current class to give us its ClassLoader
+     * (the part of the Java runtime that reads classes from their files and sets
+     * them up in the JVM).
+     * Then we ask the ClassLaoder to find us a resource named "input.txt" and give
+     * us back
+     * an InputStream for it.
+     */
+    InputStream input = getClass().getClassLoader().getResourceAsStream("input5.txt");
+    assertNotNull(input);
+
+    InputStream expectedStream = getClass().getClassLoader().getResourceAsStream("output5.txt");
+    assertNotNull(expectedStream);
+
+    InputStream oldIn = System.in;
+    PrintStream oldOut = System.out;
+
+    try {
+      System.setIn(input);
+      System.setOut(out);
+      App.main(new String[0]);
+    } finally {
+      System.setIn(oldIn);
+      System.setOut(oldOut);
+    }
+
+    String expected = new String(expectedStream.readAllBytes()); // read all the data from our expectedStream
+    String actual = bytes.toString();// get the String out of bytes
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  @ResourceLock(value = Resources.SYSTEM_OUT, mode = ResourceAccessMode.READ_WRITE)
+  void test_Computer_to_human() throws IOException{
+     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    PrintStream out = new PrintStream(bytes, true);
+
+    /*
+     * asks the current class to give us its ClassLoader
+     * (the part of the Java runtime that reads classes from their files and sets
+     * them up in the JVM).
+     * Then we ask the ClassLaoder to find us a resource named "input.txt" and give
+     * us back
+     * an InputStream for it.
+     */
+    InputStream input = getClass().getClassLoader().getResourceAsStream("input6.txt");
+    assertNotNull(input);
+
+    InputStream expectedStream = getClass().getClassLoader().getResourceAsStream("output6.txt");
     assertNotNull(expectedStream);
 
     InputStream oldIn = System.in;

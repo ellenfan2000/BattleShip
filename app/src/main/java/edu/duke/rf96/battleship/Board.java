@@ -1,5 +1,7 @@
 package edu.duke.rf96.battleship;
 
+import java.util.HashMap;
+
 public interface Board<T> {
 
   /**
@@ -44,5 +46,17 @@ record it.  Then we return this ship.
    */
   public T whatIsAtForEnemy(Coordinate where);
 
+  /**
+   * @param newship is the same type of ship newly created as
+   *                the result of move
+   * @param toMove  is the old ship
+   * @return return null is success, else return add failure
+   */
+  public String tryMoveShip(Ship<T> newShip, Ship<T> toMove);
+
   public Boolean isLose();
+
+  public HashMap<String, Integer> sonarScan(Coordinate C);
+
+  public Ship<T> whichShipisAt(Coordinate where);
 }
