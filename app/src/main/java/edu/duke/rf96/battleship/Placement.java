@@ -15,17 +15,18 @@ public class Placement {
 
   /**
    * Construct a Placement
-   @param orientation: V,H,Up, Right, Down, Left
+   * 
+   * @param orientation: V,H,Up, Right, Down, Left
    */
   public Placement(Coordinate w, char or) {
     where = w;
     orien = or;
-    if (orien != 'H' && orien != 'V' && orien != 'U' && orien != 'R' && orien != 'D' && orien != 'L'){
-       throw new IllegalArgumentException("That placement is invalid: it does not have the correct format.");
+    if (orien != 'H' && orien != 'V' && orien != 'U' && orien != 'R' && orien != 'D' && orien != 'L') {
+      throw new IllegalArgumentException("That placement is invalid: it does not have the correct format.");
     }
   }
 
-  /*
+  /**
    * Construct a Placement
    * 
    * @param descr : string got from players in the form "A3H", "B9H"
@@ -39,8 +40,8 @@ public class Placement {
     char orienC = descr.charAt(2);
 
     where = new Coordinate(coorStr);
-    if (orienC != 'H' && orienC != 'V' && orienC != 'U' && orienC != 'R' && orienC != 'D' && orienC != 'L'){
-       throw new IllegalArgumentException("That placement is invalid: it does not have the correct format.");
+    if (orienC != 'H' && orienC != 'V' && orienC != 'U' && orienC != 'R' && orienC != 'D' && orienC != 'L') {
+      throw new IllegalArgumentException("That placement is invalid: it does not have the correct format.");
     }
     orien = orienC;
   }

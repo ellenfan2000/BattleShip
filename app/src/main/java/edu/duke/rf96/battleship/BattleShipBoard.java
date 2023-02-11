@@ -10,7 +10,7 @@ public class BattleShipBoard<T> implements Board<T> {
   private final ArrayList<Ship<T>> myShips;
   private final PlacementRuleChecker<T> placementChecker;
   private HashSet<Coordinate> enemyMisses;
-  private HashMap<Coordinate,T> enemyHits;
+  private HashMap<Coordinate, T> enemyHits;
   private final T missInfo;
 
   /**
@@ -23,6 +23,7 @@ public class BattleShipBoard<T> implements Board<T> {
    * @param placementCheck is used to check whether the placement of a ship is
    *                       valid
    * @param enemyMisses    records where the enemy has missed
+   * @param enemyHits      records where the enemy has hit a ship
    * @throws IllegalArgumentException if the width or height are less than or
    *                                  equal to zero.
    */
@@ -38,7 +39,7 @@ public class BattleShipBoard<T> implements Board<T> {
     myShips = new ArrayList<Ship<T>>();
     placementChecker = rc;
     enemyMisses = new HashSet<Coordinate>();
-    enemyHits = new HashMap<Coordinate,T>();
+    enemyHits = new HashMap<Coordinate, T>();
     missInfo = mi;
   }
 
@@ -69,18 +70,21 @@ public class BattleShipBoard<T> implements Board<T> {
     return "That placement is invalid: " + mess + ".";
   }
 
-  /*
+  /**
    * This method takes a Coordinate, and sees which (if any) Ship
    * occupies that coordinate. If one is found, we return whatever
    * displayInfo it has at those coordinates. If
    * none is found, we return null.
+   * 
+   * @param where the coordinate of the square we want to know
+   * @return character represents the ship or *(hit)
    */
   public T whatIsAtForSelf(Coordinate where) {
     return whatIsAt(where, true);
   }
 
   protected T whatIsAt(Coordinate where, boolean isSelf) {
-    if(isSelf){
+    if (isSelf) {
       for (Ship<T> s : myShips) {
         if (s.occupiesCoordinates(where)) {
           return s.getDisplayInfoAt(where, isSelf);
@@ -88,7 +92,7 @@ public class BattleShipBoard<T> implements Board<T> {
       }
     }
     if (!isSelf) {
-      if (enemyHits.containsKey(where)){
+      if (enemyHits.containsKey(where)) {
         return enemyHits.get(where);
       }
       if (enemyMisses.contains(where)) {
@@ -103,6 +107,8 @@ public class BattleShipBoard<T> implements Board<T> {
   }
 
   /**
+   * record fire and update ememyhit and enemy miss
+   * 
    * @param c the coordinate been fired at
    * @return if hit, return the ship been hit
    *         if not , return null
@@ -115,11 +121,18 @@ public class BattleShipBoard<T> implements Board<T> {
     for (Ship<T> s : myShips) {
       if (s.occupiesCoordinates(c)) {
         s.recordHitAt(c);
-        enemyHits.put(c,s.getDisplayInfoAt(c, false));
+        enemyHits.put(c, s.getDisplayInfoAt(c, false));
+        if (enemyMisses.contains(c)) {
+          enemyMisses.remove(c);
+        }
         return s;
       }
     }
+
     enemyMisses.add(c);
+    if (enemyHits.containsKey(c)) {
+      enemyHits.remove(c);
+    }
     return null;
 
   }
@@ -177,6 +190,8 @@ public class BattleShipBoard<T> implements Board<T> {
   }
 
   /**
+   * put a sonar on the board
+   * 
    * @param C the center of sonar
    * @return a hashmap of how many sqares each type of ship takes
    */

@@ -16,6 +16,9 @@ public class ComputerPlayer extends TextPlayer {
     lastfire = new Coordinate(0, -1);
   }
 
+  /**
+   * Computer place ships in a specific way
+   */
   @Override
   public void doPlacementPhaseV2() {
     theBoard.tryAddShip(shipFactory.makeSubmarine(new Placement("D0V")));
@@ -31,6 +34,9 @@ public class ComputerPlayer extends TextPlayer {
 
   }
 
+  /**
+   * Compter fire in a regular maner, scan the board one by one
+   */
   public void fire(Board<Character> enemyBoard) {
     int row = lastfire.getRow();
     int col = lastfire.getColumn();
@@ -51,11 +57,14 @@ public class ComputerPlayer extends TextPlayer {
     if (s != null) {
       out.println("Player " + name + " hit your " + s.getName() + " at " + c.toString());
     } else {
-      out.println("Player " + name + " missed "+ " at " + c.toString());
+      out.println("Player " + name + " missed " + " at " + c.toString());
     }
     lastfire = c;
   }
 
+  /**
+   * Compter only fire, does not have special movement
+   */
   @Override
   public void playOneTurnV2(Board<Character> enemyBoard, BoardTextView enemyView, String myHeader, String enemyHeader) {
     fire(enemyBoard);

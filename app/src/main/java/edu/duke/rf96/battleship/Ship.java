@@ -68,12 +68,30 @@ public interface Ship<T> {
    */
   public Iterable<Coordinate> getCoordinates();
 
-
+  /**
+   * the function calculate the coordinate relative to the center of the ship
+   * in the up or horizontal orientation
+   * 
+   * @param defini the coordinate on board
+   * @return the relative coordinate
+   */
   public Coordinate getRelativeCoordinate(Coordinate defini);
 
+  /**
+   * the function calculate the coordinate on board given the relative coordinate
+   * 
+   * @param relative coordinate referring to the center of the ship
+   * @return the coordinate on board
+   */
   public Coordinate getDefinCoordinate(Coordinate relat);
 
+  /**
+   * @return the center coordinate on board
+   */
   public Coordinate getCenter();
 
+  /**
+   * @return the type of the ship(s, b, d,c)
+   */
   public String getType();
 }

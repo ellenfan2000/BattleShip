@@ -9,7 +9,21 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.function.Function;
 
-public class TextPlayer{
+public class TextPlayer {
+
+  /**
+   * This class represents a human text player that can place ships and make
+   * actions
+   * 
+   * @param theBoard        current player's board
+   * @param view            curent board's view
+   * @param shipCreationFns a map of each ships name to their corresponding
+   *                        creation function
+   * @param shipsToPlace    a list of all ships' name that need to place on the
+   *                        board
+   * @param numSonar        the number of opportunities to place a sonar
+   * @param numMove         the number of opportunities to move a ship
+   */
   protected final Board<Character> theBoard;
   protected final BoardTextView view;
   protected final BufferedReader inputReader;
@@ -89,7 +103,7 @@ public class TextPlayer{
         String error_message = theBoard.tryAddShip(s);
         if (error_message != null) {
           out.println(error_message);
-          //throw new IllegalArgumentException(error_message);
+          // throw new IllegalArgumentException(error_message);
         } else {
           break;
         }
@@ -107,16 +121,16 @@ public class TextPlayer{
    * , call doOnePlacement to place every ship
    * 
    */
-
   // public void doPlacementPhase() throws IOException {
   //   out.println("\n--------------------------------------------------------------------------------");
   //   out.print(view.displayMyOwnBoard());
-  //   out.println("--------------------------------------------------------------------------------\n" +
-  //       "Player " + name + ": you are going to place the following ships (which are all\n" +
+  //   out.println("--------------------------------------------------------------------------------\n"
+  //       +
+  //       "Player " + name + ": you are going to place the following ships (which areall\n" +
   //       "rectangular). For each ship, type the coordinate of the upper left\n" +
   //       "side of the ship, followed by either H (for horizontal) or V (for\n" +
-  //       "vertical).  For example M4H would place a ship horizontally starting\n" +
-  //       "at M4 and going to the right.  You have\n\n" +
+  //       "vertical). For example M4H would place a ship horizontally starting\n" +
+  //       "at M4 and going to the right. You have\n\n" +
   //       "2 \"Submarines\" ships that are 1x2\n" +
   //       "3 \"Destroyers\" that are 1x3\n" +
   //       "3 \"Battleships\" that are 1x4\n" +
@@ -127,6 +141,13 @@ public class TextPlayer{
   //   }
   // }
 
+  /**
+   * this method display the starting (empty) board
+   * ,print the instructions message (from the README,
+   * but also shown again near the top of this file)
+   * , call doOnePlacement to place every ship
+   * 
+   */
   public void doPlacementPhaseV2() throws IOException {
     out.println("\n--------------------------------------------------------------------------------");
     out.print(view.displayMyOwnBoard());
@@ -139,23 +160,30 @@ public class TextPlayer{
         "2 \"Submarines\" ships that are 1x2 (H or V)\n" +
         "3 \"Destroyers\" that are 1x3 (H or V)\n" +
         "3 \"Battleships\" that are: \n\n" +
-        " *b              B         Bbb        *b\n"+
-        " bbb    OR       bb   OR    b     OR  bb \n"+
-        "                 b                     b \n\n "+
-        " Up             Right      Down      Left\n\n"+
+        " *b              B         Bbb        *b\n" +
+        " bbb    OR       bb   OR    b     OR  bb \n" +
+        "                 b                     b \n\n " +
+        " Up             Right      Down      Left\n\n" +
         "2 \"Carriers\" that are:\n\n" +
-        " C                       C             \n"+
-        " c          *cccc        cc       * ccc\n"+
-        " cc   OR    ccc      OR  cc   OR  cccc \n"+
-        " cc                       c         \n"+
-        "  c                       c\n\n"+
-        " Up         Right       Down      Left\n"+
-                
+        " C                       C             \n" +
+        " c          *cccc        cc       * ccc\n" +
+        " cc   OR    ccc      OR  cc   OR  cccc \n" +
+        " cc                       c         \n" +
+        "  c                       c\n\n" +
+        " Up         Right       Down      Left\n" +
+
         "--------------------------------------------------------------------------------");
     for (String s : shipsToPlace) {
       doOnePlacement(s, shipCreationFns.get(s));
     }
   }
+
+  /**
+   * This method read a coordinate from the player
+   * 
+   * @return coordinate read
+   * @throws if the coordinate is not valid, throw IllegalArgumentException
+   */
 
   public Coordinate readCoordinate(String prompt) throws IOException {
     out.println(prompt);
@@ -163,13 +191,18 @@ public class TextPlayer{
     if (s == null) {
       throw new EOFException("Input stream is null");
     }
-        Coordinate c = new Coordinate(s);
-        if (c.getRow() >= theBoard.getHeight() || c.getColumn() >= theBoard.getWidth()) {
-          throw new IllegalArgumentException("The coordinate is out of bound");
-          }
-        return c;
+    Coordinate c = new Coordinate(s);
+    if (c.getRow() >= theBoard.getHeight() || c.getColumn() >= theBoard.getWidth()) {
+      throw new IllegalArgumentException("The coordinate is out of bound");
+    }
+    return c;
   }
 
+  /**
+   * This method read a choice (F, S, M) from the player
+   * 
+   * @return action coordinate read
+   */
   public Character readChoice(String prompt) throws IOException {
     // out.println("---------------------------------------------------------------------------\n");
     out.println("Possible actions for Player " + name + ":\n");
@@ -205,16 +238,18 @@ public class TextPlayer{
 
   }
 
-  // public void playOneTurn(Board<Character> enemyBoard, BoardTextView enemyView, String myHeader, String enemyHeader)
+  // public void playOneTurn(Board<Character> enemyBoard, BoardTextView enemyView,
+  //     String myHeader, String enemyHeader)
   //     throws IOException {
   //   out.println("---------------------------------------------------------------------------");
   //   out.println("Player " + name + "'s turn:");
-  //   out.println(view.displayMyBoardWithEnemyNextToIt(enemyView, myHeader, enemyHeader));
+  //   out.println(view.displayMyBoardWithEnemyNextToIt(enemyView, myHeader,
+  //       enemyHeader));
   //   out.println("---------------------------------------------------------------------------");
   //   String prompt = "Player " + name + " where do you want to fire at?";
 
-  //   while(true){
-  //     try{
+  //   while (true) {
+  //     try {
   //       Coordinate c = readCoordinate(prompt);
   //       Ship<Character> s = enemyBoard.fireAt(c);
   //       out.println("---------------------------------------------------------------------------");
@@ -225,16 +260,22 @@ public class TextPlayer{
   //       }
   //       break;
 
-  //     }catch (IllegalArgumentException ex) {
-  //        out.println("That Coordinate is invalid: it does not have the correct format.");
+  //     } catch (IllegalArgumentException ex) {
+  //       out.println("That Coordinate is invalid: it does not have the correct format.");
   //     }
   //   }
   // }
 
+  /**
+   * @return name of the player
+   */
   public String getName() {
     return name;
   }
 
+  /**
+   * one possible action: fire at a square
+   */
   public void fireaSquare(Board<Character> enemyBoard) throws IOException {
     String prompt = "Player " + name + " where do you want to fire at?";
     Coordinate c = readCoordinate(prompt);
@@ -248,6 +289,9 @@ public class TextPlayer{
 
   }
 
+  /**
+   * one possible action: place a sonar
+   */
   public void scanSquares(Board<Character> enemyBoard) throws IOException {
     String prompt = "Player " + name + " where do you want to Scan?";
     Coordinate c = readCoordinate(prompt);
@@ -262,11 +306,16 @@ public class TextPlayer{
         "Battleships occupy " + battle + " squares\n" +
         "Carriers occupy " + carr + " square");
 
-    //out.println("---------------------------------------------------------------------------");
+    // out.println("---------------------------------------------------------------------------");
     numSonar -= 1;
 
   }
 
+  /**
+   * one possible action: move a ship
+   * 
+   * @throws if movement does not success, thwow IllegalArgumentException
+   */
   public void moveAShip() throws IOException {
     String prompt1 = "Player " + name
         + " which ship do you want to move? (Please enter a coordinate in the ship you want to move)";
